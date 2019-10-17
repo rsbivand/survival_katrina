@@ -231,6 +231,9 @@ library(ggplot2)
 ### code chunk number 32: bivand+gomez-rubio_SMij.Rnw:625-628
 ###################################################
 # mat <- -1*wb_inla_fita_41$summary.random$st_id[, 4:6]
+# cn <- colnames(mat)
+# mat <- mat[, 3:1]
+# colnames(mat) <- cn
 # rownames(mat) <- names(streets_41)
 # print(xtable(mat, align=c("l","r","r","r"), digits=c(NA, 5, 5, 5), display=c("s", "f", "f", "f")), floating=FALSE, comment=FALSE, sanitize.text.function=function(x){x}, hline.after=c(-1,0,3))
 
