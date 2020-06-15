@@ -1,9 +1,7 @@
 ### R code from vignette source 'bivand+gomez-rubio_SMij.Rnw'
 
-
-
 ###################################################
-### code chunk number 12: bivand+gomez-rubio_SMij.Rnw:226-238
+### code chunk number 13: bivand+gomez-rubio_SMij.Rnw:239-251
 ###################################################
 library(spatialprobit)
 data(Katrina)
@@ -16,19 +14,17 @@ t <- table(sf_katrina$Days)
 diff_days <- diff(as.Date(names(t)))
 names(diff_days) <- names(t)[-length(t)]
 yrs <- format(as.Date(names(diff_days)), "%Y")
-# o
 
 
 ###################################################
-### code chunk number 13: bivand+gomez-rubio_SMij.Rnw:247-250
+### code chunk number 14: bivand+gomez-rubio_SMij.Rnw:262-265
 ###################################################
 suppressMessages(library(xtable))
 mat <- table(yrs, diff_days)
-print(xtable(mat, align=c("l","r","r","r","r","r","r","r"), digits=c(NA, 0, 0, 0, 0, 0, 0, 0), display=c("s", "d", "d", "d", "d", "d", "d", "d")), floating=FALSE, comment=FALSE, sanitize.text.function=function(x){x}, hline.after=c(-1,0,2))
 
 
 ###################################################
-### code chunk number 14: bivand+gomez-rubio_SMij.Rnw:258-267
+### code chunk number 15: bivand+gomez-rubio_SMij.Rnw:279-288
 ###################################################
 sf_katrina$days_mod <- sf_katrina$days
 sf_katrina$days[is.na(sf_katrina$days)] <- 99999
@@ -38,22 +34,21 @@ sf_katrina$y0_360 <- as.numeric(!sf_katrina$days < 360)
 sf_katrina$sliced <- (sf_katrina$y0_90 == 0) + (sf_katrina$y0_180 == 0) + (sf_katrina$y0_360 == 0) + as.numeric(sf_katrina$days < 99999)
 sf_katrina$f_sliced <- factor(sf_katrina$sliced, levels=4:0, labels=c("day 0-90",
     "day 90-180", "day 180-360", "day 360 +", "never"))
-# table(sf_katrina$y0_90)
 
 
 ###################################################
-### code chunk number 15: bivand+gomez-rubio_SMij.Rnw:270-276
+### code chunk number 16: bivand+gomez-rubio_SMij.Rnw:291-297
 ###################################################
 suppressPackageStartupMessages(library(car))
 sf_katrina$f_owntype <- recode(sf_katrina$owntype, "1='sole'; 2='local'; 3='national'", as.factor=TRUE)
 sf_katrina$f_sesstatus <- recode(sf_katrina$sesstatus, "c(1,2)='lower'; c(4,5)='upper'; else='av'", as.factor=TRUE)
 sf_katrina$f_sizeemp <- recode(sf_katrina$sizeemp, "1='small'; 2='av'; 3='large'", as.factor=TRUE)
-sf_katrina$f_street <- recode(sf_katrina$street, "1='Magazine Street'; 2='Carrollton Avenue'; 3='St. Claude Avenue'", as.factor=TRUE)
+sf_katrina$f_street <- recode(sf_katrina$street, "1='Magazine Street'; 2='Carrollton Avenue'; 3='St. Claude Avenue'", as.factor=TRUE, levels=c("Magazine Street", "Carrollton Avenue", "St. Claude Avenue"))
 sf_katrina$elevation1 <- sf_katrina$elevation - min(sf_katrina$elevation)
 
 
 ###################################################
-### code chunk number 16: bivand+gomez-rubio_SMij.Rnw:286-290
+### code chunk number 17: bivand+gomez-rubio_SMij.Rnw:309-313
 ###################################################
 mat <- table(sf_katrina$f_sliced, sf_katrina$f_street)
 mat <- rbind(mat, apply(mat, 2, sum))
@@ -62,58 +57,18 @@ print(xtable(mat, align=c("l","r","r","r"), digits=c(NA, 0, 0, 0), display=c("s"
 
 
 ###################################################
-### code chunk number 17: bivand+gomez-rubio_SMij.Rnw:311-314
-###################################################
-mat <- prop.table(table(sf_katrina$f_sizeemp, sf_katrina$f_street), margin=2)*100
-rownames(mat) <- c("average", "large", "small")
-print(xtable(mat[c(3,1,2),], align=c("l","r","r","r"), digits=c(NA, 2, 2, 2), display=c("s", "f", "f", "f")), floating=FALSE, comment=FALSE, sanitize.text.function=function(x){x}, hline.after=c(-1,0,3))
-
-
-###################################################
-### code chunk number 18: bivand+gomez-rubio_SMij.Rnw:326-328
-###################################################
-mat <- prop.table(table(sf_katrina$f_owntype, sf_katrina$f_street), margin=2)*100
-print(xtable(mat[c(3,1,2),], align=c("l","r","r","r"), digits=c(NA, 2, 2, 2), display=c("s", "f", "f", "f")), floating=FALSE, comment=FALSE, sanitize.text.function=function(x){x}, hline.after=c(-1,0,3))
-
-
-###################################################
-### code chunk number 19: bivand+gomez-rubio_SMij.Rnw:340-343
-###################################################
-mat <- prop.table(table(sf_katrina$f_sesstatus, sf_katrina$f_street), margin=2)*100
-rownames(mat) <- c("average", "lower", "upper")
-print(xtable(mat[c(2,1,3),], align=c("l","r","r","r"), digits=c(NA, 2, 2, 2), display=c("s", "f", "f", "f")), floating=FALSE, comment=FALSE, sanitize.text.function=function(x){x}, hline.after=c(-1,0,3))
-
-
-###################################################
-### code chunk number 20: bivand+gomez-rubio_SMij.Rnw:350-355
-###################################################
-par(mar=c(4,4,2,1)+0.1)
-oopar <- par(las=1, mar=c(4, 10, 4, 2))
-boxplot(flood ~ f_street, sf_katrina, varwidth=TRUE, horizontal=TRUE, ylab="", xlab="flood")
-par(oopar)
-
-
-###################################################
-### code chunk number 21: bivand+gomez-rubio_SMij.Rnw:362-367
-###################################################
-par(mar=c(4,4,2,1)+0.1)
-oopar <- par(las=1, mar=c(4, 10, 4, 2))
-boxplot(elevation1 ~ f_street, sf_katrina, varwidth=TRUE, horizontal=TRUE, ylab="", xlab="elevation")
-par(oopar)
-
-
-###################################################
-### code chunk number 22: bivand+gomez-rubio_SMij.Rnw:384-391
+### code chunk number 18: bivand+gomez-rubio_SMij.Rnw:329-337
 ###################################################
 sf_katrina$days_mod[is.na(sf_katrina$days_mod)] <- 450
 sf_katrina_41 <- sf_katrina[sf_katrina$days_mod > 41,]
 sf_katrina_41$days_mod <- sf_katrina_41$days_mod - 41
 sf_katrina_41$status <- !(sf_katrina_41$days_mod == 409)
 sf_katrina_41$days_mod1 <- sf_katrina_41$days_mod/30 # approximate months
+sf_katrina_41$days_mod2 <- sf_katrina_41$days_mod/7 # approximate weeks
 
 
 ###################################################
-### code chunk number 23: bivand+gomez-rubio_SMij.Rnw:400-403
+### code chunk number 19: bivand+gomez-rubio_SMij.Rnw:345-348
 ###################################################
 mat <- prop.table(table(sf_katrina_41$status, sf_katrina_41$f_street), margin=2)*100
 rownames(mat) <- c("still closed", "re-opened")
@@ -121,7 +76,7 @@ print(xtable(mat, align=c("l","r","r","r"), digits=c(NA, 2, 2, 2), display=c("s"
 
 
 ###################################################
-### code chunk number 24: bivand+gomez-rubio_SMij.Rnw:411-418
+### code chunk number 20: bivand+gomez-rubio_SMij.Rnw:358-365
 ###################################################
 sf_katrina_41$f_owntype1 <- recode(sf_katrina_41$owntype, "1='sole'; c(2,3)='chain'", as.factor=TRUE)
 sf_katrina_41$f_sesstatus1 <- recode(sf_katrina_41$sesstatus, "c(1,2)='lower'; c(3,4,5)='av'", as.factor=TRUE)
@@ -133,297 +88,833 @@ streets_41 <- split(sf_katrina_41, sf_katrina_41$f_street)
 
 
 ###################################################
-### code chunk number 25: bivand+gomez-rubio_SMij.Rnw:510-516
+### code chunk number 21: bivand+gomez-rubio_SMij.Rnw:463-466
 ###################################################
 library(survival)
 km_all <- survfit(Surv(time = days_mod1, event = status) ~ 1, data = sf_katrina_41)
-km_car <- survfit(Surv(time = days_mod1, event = status) ~ 1, data = streets_41[["Carrollton Avenue"]])
-km_mag <- survfit(Surv(time = days_mod1, event = status) ~ 1, data = streets_41[["Magazine Street"]])
-km_stc <- survfit(Surv(time = days_mod1, event = status) ~ 1, data = streets_41[["St. Claude Avenue"]])
 km_streets <- survfit(Surv(time = days_mod1, event = status) ~ f_street, data = sf_katrina_41)
 
 
 ###################################################
-### code chunk number 26: bivand+gomez-rubio_SMij.Rnw:521-548
+### code chunk number 22: bivand+gomez-rubio_SMij.Rnw:470-472
 ###################################################
-slices_d <- (c(41, 90, 180, 360)-41)/30
-suppressPackageStartupMessages(library(zoo))
-lbs <- as.yearmon(seq(as.Date("2005-08-29")+41, as.Date("2006-08-29")+41, 60))
-oopar <- par(mfrow=c(2,2), mar=c(3, 3, 3, 1))
-plot(km_all, col="blue", main="All", xaxs="r", axes=FALSE)
-abline(v=slices_d, lty=3)
-axis(1, at=seq(0,12,2), labels=lbs)
-box()
-axis(2)
-plot(km_car, main="Carrollton Avenue", xaxs="r", axes=FALSE)
-abline(v=slices_d, lty=3)
-axis(1, at=seq(0,12,2), labels=lbs)
-box()
-axis(2)
-plot(km_mag, col="red", main="Magazine Street", xaxs="r", axes=FALSE)
-abline(v=slices_d, lty=3)
-axis(1, at=seq(0,12,2), labels=lbs)
-box()
-axis(2)
-plot(km_stc, col="green", main="St. Claude Avenue", xaxs="r", axes=FALSE)
-abline(v=slices_d, lty=3)
-axis(1, at=seq(0,12,2), labels=lbs)
-box()
-axis(2)
-par(oopar)
+km_allw <- survfit(Surv(time = days_mod2, event = status) ~ 1, data = sf_katrina_41)
+km_streetsw <- survfit(Surv(time = days_mod2, event = status) ~ f_street, data = sf_katrina_41)
 
 
 ###################################################
-### code chunk number 27: bivand+gomez-rubio_SMij.Rnw:557-565
+### code chunk number 23: bivand+gomez-rubio_SMij.Rnw:476-492
 ###################################################
-plot(km_streets, main="", conf.int=TRUE, col=1:3, xaxs="r", axes=FALSE)
-legend("topright", legend=names(streets_41), col=1:3, pch=19, bty="n", cex=0.7)
-abline(v=slices_d, lty=3)
-axis(1, at=seq(0,12,2), labels=lbs)
-box()
-axis(2)
+# VGR: PLots of observations per time
+obs.time <- as.data.frame(table(round(sf_katrina_41$days_mod2, 3)))
+obs.time$Var1 <- as.numeric(as.character(obs.time$Var1))
+
+# Required to draw axis
+slices_d <- (c(41, 90, 180, 360)-41)/7
+library(zoo)
+lbs <- as.yearmon(seq(as.Date("2005-08-29")+41, as.Date("2006-08-29")+41, 90))
+
+suppressPackageStartupMessages(library(ggplot2))
+ggplot(obs.time[-nrow(obs.time), ]) + # Remove censored shops
+  geom_line(aes(x = Var1, y = Freq)) + 
+  geom_vline(xintercept=slices_d, lty=3, lwd=1) + scale_x_continuous(breaks=seq(0, 400/7, 90/7), labels=as.character(lbs)) +
+  xlab("Date") + ylab("Number of shops that re-opened")
 
 
 ###################################################
-### code chunk number 28: bivand+gomez-rubio_SMij.Rnw:571-575
+### code chunk number 24: bivand+gomez-rubio_SMij.Rnw:497-505
 ###################################################
-wb_modela_41 <- survreg(Surv(time = days_mod1, event = status) ~ elevation1 + I(elevation1^2) + f_owntype1 + f_sesstatus1 + 
-                          log(medinc) + f_sizeemp1, data = sf_katrina_41, dist="weibull")
-wb_modelb_41 <- survreg(Surv(time = days_mod1, event = status) ~ elevation1 + I(elevation1^2) + f_owntype1 + f_sesstatus1 + 
+suppressPackageStartupMessages(library(ggplot2))
+suppressPackageStartupMessages(library(ggfortify))
+autoplot(km_streetsw) + geom_vline(xintercept=slices_d, lty=3, lwd=1) + scale_x_continuous(breaks=seq(0, 400/7, 90/7), labels=as.character(lbs))
+
+
+###################################################
+### code chunk number 25: bivand+gomez-rubio_SMij.Rnw:513-515
+###################################################
+wb_modelb_41w <- survreg(Surv(time = days_mod2, event = status) ~ elevation1 + I(elevation1^2) + f_owntype1 + f_sesstatus1 + 
                           log(medinc) + f_sizeemp1 + f_street, data = sf_katrina_41, dist="weibull")
 
 
 ###################################################
-### code chunk number 29: bivand+gomez-rubio_SMij.Rnw:579-580
+### code chunk number 26: bivand+gomez-rubio_SMij.Rnw:518-527
 ###################################################
-# suppressPackageStartupMessages(library(INLA))
+mag <- sf_katrina_41[sf_katrina_41$f_street == "Magazine Street",]
+wb_modela_41_mag <- survreg(Surv(time = days_mod2, event = status) ~ elevation1 + I(elevation1^2) + f_owntype1 + f_sesstatus1 + 
+                          log(medinc) + f_sizeemp1, data = mag, dist="weibull")
+car <- sf_katrina_41[sf_katrina_41$f_street == "Carrollton Avenue",]
+wb_modela_41_car <- survreg(Surv(time = days_mod2, event = status) ~ elevation1 + I(elevation1^2) + f_owntype1 + f_sesstatus1 + 
+                          log(medinc) + f_sizeemp1, data = car, dist="weibull")
+stc <- sf_katrina_41[sf_katrina_41$f_street == "St. Claude Avenue",]
+wb_modela_41_stc <- survreg(Surv(time = days_mod2, event = status) ~ elevation1 + I(elevation1^2) + f_owntype1 + f_sesstatus1 + 
+                          log(medinc) + f_sizeemp1, data = stc, dist="weibull")
 
 
 ###################################################
-### code chunk number 30: bivand+gomez-rubio_SMij.Rnw:583-588 (eval = FALSE)
+### code chunk number 27: bivand+gomez-rubio_SMij.Rnw:530-531
 ###################################################
-# sf_katrina_41$st_id <- as.numeric(sf_katrina_41$f_street)
-# all_surv_41 <- Surv(time = sf_katrina_41$days_mod1, event = sf_katrina_41$status)
-# all_surv_inla_41 <- inla.surv(all_surv_41[,1], all_surv_41[,2])
-# wb_inla_fita_41 <- inla(all_surv_inla_41 ~ elevation1 + I(elevation1^2) + f_owntype1 + f_sesstatus1 + log(medinc) + f_sizeemp1 + f(st_id, model="iid", param=c(1, 0.01)), data = sf_katrina_41, family = "weibullsurv")
+suppressPackageStartupMessages(library(INLA))
+
+
+###################################################
+### code chunk number 28: bivand+gomez-rubio_SMij.Rnw:534-541
+###################################################
+sf_katrina_41$st_id <- as.numeric(sf_katrina_41$f_street)
+all_surv_41 <- Surv(time = sf_katrina_41$days_mod1, event = sf_katrina_41$status)
+all_surv_inla_41 <- inla.surv(all_surv_41[,1], all_surv_41[,2])
+wb_inla_fita_41 <- inla(all_surv_inla_41 ~ elevation1 + I(elevation1^2) + f_owntype1 + f_sesstatus1 + log(medinc) + f_sizeemp1 + f(st_id, model="iid", param=c(1, 0.01)), data = sf_katrina_41, family = "weibullsurv", control.compute = list(dic = TRUE))
 # saveRDS(wb_inla_fita_41, file="wb_inla_fita_41.rds")
+wb_inla_fitb_41 <- inla(all_surv_inla_41 ~ elevation1 + I(elevation1^2) + f_owntype1 + f_sesstatus1 + log(medinc) + f_sizeemp1, data = sf_katrina_41, family = "weibullsurv", control.compute = list(dic = TRUE))
+# saveRDS(wb_inla_fitb_41, file="wb_inla_fitb_41.rds")
 
 
 ###################################################
-### code chunk number 31: bivand+gomez-rubio_SMij.Rnw:597-612
+### code chunk number 29: bivand+gomez-rubio_SMij.Rnw:552-575
 ###################################################
-# wb_inla_fita_41 <- readRDS("wb_inla_fita_41.rds")
-# inla_fxd <- summary(wb_inla_fita_41)$fixed[-1, 1:2]
-# inla_fxd[,1] <- -1*inla_fxd[,1]
-# res <- rbind(summary(wb_modela_41)$table[-c(1,8),1:2], summary(wb_modelb_41)$table[-c(1,8:10),1:2], inla_fxd)
-# dres <- as.data.frame(res)
-# dres$covariate <- factor(rownames(res), levels=c("elevation1", "I(elevation1^2)", "f_owntype1sole", "f_sesstatus1lower", "log(medinc)", "f_sizeemp1small"))
-# dres$street_dummy <- c(rep("no", 6), rep("yes", 6), rep("iid", 6))
-# names(dres)[1:2] <- c("mean", "sd")
-# dres$ymax <- dres$mean + qnorm(0.975)*dres$sd
-# dres$ymin <- dres$mean + qnorm(0.025)*dres$sd
+#wb_inla_fita_41 <- readRDS("wb_inla_fita_41.rds")
+inla_fxd <- summary(wb_inla_fita_41)$fixed[-1, 1:2]
+inla_fxd[,1] <- -1*inla_fxd[,1]
+res <- rbind(summary(wb_modela_41_mag)$table[-c(1,8),1:2], summary(wb_modela_41_car)$table[-c(1,8:10),1:2],  summary(wb_modela_41_stc)$table[-c(1,8:10),1:2], summary(wb_modelb_41w)$table[-c(1,8:10),1:2], inla_fxd)
+dres <- as.data.frame(res)
+dres$covariate <- factor(rownames(res), levels=c("elevation1", "I(elevation1^2)", "f_owntype1sole", "f_sesstatus1lower", "log(medinc)", "f_sizeemp1small"))
+levels(dres$covariate) <- c("Elevation", "Squared elevation", "Sole owner", "Lower SE status", "Log med. income", "Small firm")
+dres$Street <- factor(rep(c(levels(sf_katrina$f_street), "Pooled", "IID RE"), each=6), levels=c("Magazine Street", "Carrollton Avenue", "St. Claude Avenue", "Pooled", "IID RE"))
+names(dres)[1:2] <- c("mean", "sd")
+dres$ymax <- dres$mean + qnorm(0.975)*dres$sd
+dres$ymin <- dres$mean + qnorm(0.025)*dres$sd
+
+# FIX INLA estimates to use 95% credible intervals
+dres$ymin[dres$street == "IID RE"] <- wb_inla_fita_41$summary.fixed[-1, 3]
+dres$ymax[dres$street == "IID RE"] <-  wb_inla_fita_41$summary.fixed[-1, 5]
+
 library(ggplot2)
-# limits <- aes(ymax = ymax, ymin=ymin)
-# ggplot(dres, aes(y=mean, x=covariate, shape=street_dummy)) + geom_point(position=position_dodge(.9), cex=2) + geom_errorbar(limits, position=position_dodge(.9)) + geom_hline(yintercept = 0, linetype=2) + facet_wrap(~covariate, scale="free") + theme(plot.background = element_rect(fill = "transparent",colour = NA), legend.background = element_rect(colour = NA, fill = "transparent")) + theme(axis.title.x=element_blank(), axis.text.x=element_blank(), axis.ticks.x=element_blank()) + ylab("")
+limits <- aes(ymax = ymax, ymin=ymin)
+ggplot(dres, aes(y=mean, x=covariate, shape=Street)) + geom_point(position=position_dodge(.9), cex=3) + geom_errorbar(limits, position=position_dodge(.9)) + geom_hline(yintercept = 0, linetype=2) + facet_wrap(~covariate, scale="free") + theme(plot.background = element_rect(fill = "transparent",colour = NA), legend.background = element_rect(colour = NA, fill = "transparent")) + theme(axis.title.x=element_blank(), axis.text.x=element_blank(), axis.ticks.x=element_blank()) + ylab("")
 
 
 ###################################################
-### code chunk number 32: bivand+gomez-rubio_SMij.Rnw:625-628
+### code chunk number 30: bivand+gomez-rubio_SMij.Rnw:610-616
 ###################################################
-# mat <- -1*wb_inla_fita_41$summary.random$st_id[, 4:6]
-# cn <- colnames(mat)
-# mat <- mat[, 3:1]
-# colnames(mat) <- cn
-# rownames(mat) <- names(streets_41)
-# print(xtable(mat, align=c("l","r","r","r"), digits=c(NA, 5, 5, 5), display=c("s", "f", "f", "f")), floating=FALSE, comment=FALSE, sanitize.text.function=function(x){x}, hline.after=c(-1,0,3))
+mat <- -1*wb_inla_fita_41$summary.random$st_id[, 4:6]
+cn <- colnames(mat)
+mat <- mat[, 3:1]
+colnames(mat) <- cn
+rownames(mat) <- names(streets_41)
+print(xtable(mat, align=c("l","r","r","r"), digits=c(NA, 5, 5, 5), display=c("s", "f", "f", "f")), floating=FALSE, comment=FALSE, sanitize.text.function=function(x){x}, hline.after=c(-1,0,3))
 
 
 ###################################################
-### code chunk number 33: bivand+gomez-rubio_SMij.Rnw:657-664
-###################################################
-library(spdep)
-nb <- knn2nb(knearneigh(sf_katrina_41, k=11), sym=TRUE)
-E_all <- nb2mat(nb, style="B")
-
-
-###################################################
-### code chunk number 34: bivand+gomez-rubio_SMij.Rnw:667-670
+### code chunk number 31: bivand+gomez-rubio_SMij.Rnw:626-629
 ###################################################
 suppressPackageStartupMessages(library(spBayesSurv))
-mcmc <- list(nburn = 10000, nsave = 50000, nskip = 1, ndisplay= 10000)
+mcmc <- list(nburn = 50000, nsave = 150000, nskip = 5, ndisplay= 20000)
 prior <- list(maxL = 15)
 
 
 ###################################################
-### code chunk number 35: bivand+gomez-rubio_SMij.Rnw:674-677 (eval = FALSE)
+### code chunk number 32: bivand+gomez-rubio_SMij.Rnw:634-637 (eval = FALSE)
 ###################################################
 set.seed(1)
-suppressMessages(wb_all_fit <- survregbayes(Surv(time = days_mod1, event = status) ~  elevation1 + I(elevation1^2) + f_owntype1 + f_sesstatus1 + log(medinc) + f_sizeemp1 + frailtyprior("car", all_id), data = sf_katrina_41, survmodel = "AFT", dist = "weibull", mcmc = mcmc, prior = prior, Proximity= E_all))
-# saveRDS(wb_all_fit, "wb_all_fit.rds")
+suppressMessages(wb_mag <- survregbayes(Surv(time = days_mod2, event = status) ~ elevation1 + I(elevation1^2) + f_owntype1 + f_sesstatus1 + log(medinc) + f_sizeemp1, data = mag, survmodel = "AFT", dist = "weibull", mcmc = mcmc, prior = prior))
+## # saveRDS(wb_mag, "wb_mag.rds")
 
 
 ###################################################
-### code chunk number 36: bivand+gomez-rubio_SMij.Rnw:681-684 (eval = FALSE)
-###################################################
-set.seed(1)
-suppressMessages(wb_all_fit1 <- survregbayes(Surv(time = days_mod1, event = status) ~  elevation1 + I(elevation1^2) + f_owntype1 + f_sesstatus1 + log(medinc) + f_sizeemp1 + f_street + frailtyprior("car", all_id), data = sf_katrina_41, survmodel = "AFT", dist = "weibull", mcmc = mcmc, prior = prior, Proximity= E_all))
-# saveRDS(wb_all_fit1, "wb_all_fit1.rds")
-
-
-###################################################
-### code chunk number 37: bivand+gomez-rubio_SMij.Rnw:688-691 (eval = FALSE)
+### code chunk number 33: bivand+gomez-rubio_SMij.Rnw:641-644 (eval = FALSE)
 ###################################################
 set.seed(1)
-suppressMessages(wb_iid_fit <- survregbayes(Surv(time = days_mod, event = status) ~ elevation1 + I(elevation1^2) + f_owntype1 + f_sesstatus1 + log(medinc) + f_sizeemp1 +  frailtyprior("iid", all_id), data = sf_katrina_41, survmodel = "AFT", dist = "weibull", mcmc = mcmc, prior = prior))
-# saveRDS(wb_iid_fit, "wb_iid_fit.rds")
+suppressMessages(wb_car <- survregbayes(Surv(time = days_mod2, event = status) ~ elevation1 + I(elevation1^2) + f_owntype1 + f_sesstatus1 + log(medinc) + f_sizeemp1, data = car, survmodel = "AFT", dist = "weibull", mcmc = mcmc, prior = prior))
+## # saveRDS(wb_car, "wb_car.rds")
 
 
 ###################################################
-### code chunk number 38: bivand+gomez-rubio_SMij.Rnw:695-698 (eval = FALSE)
+### code chunk number 34: bivand+gomez-rubio_SMij.Rnw:648-651 (eval = FALSE)
 ###################################################
 set.seed(1)
-suppressMessages(wb_iid_fit1 <- survregbayes(Surv(time = days_mod, event = status) ~ elevation1 + I(elevation1^2) + f_owntype1 + f_sesstatus1 + log(medinc) + f_sizeemp1 +  f_street + frailtyprior("iid", all_id), data = sf_katrina_41, survmodel = "AFT", dist = "weibull", mcmc = mcmc, prior = prior))
-# saveRDS(wb_iid_fit1, "wb_iid_fit1.rds")
+suppressMessages(wb_stc <- survregbayes(Surv(time = days_mod2, event = status) ~ elevation1 + I(elevation1^2) + f_owntype1 + f_sesstatus1 + log(medinc) + f_sizeemp1, data = stc, survmodel = "AFT", dist = "weibull", mcmc = mcmc, prior = prior))
+## # saveRDS(wb_stc, "wb_stc.rds")
 
 
 ###################################################
-### code chunk number 39: bivand+gomez-rubio_SMij.Rnw:702-711
+### code chunk number 35: bivand+gomez-rubio_SMij.Rnw:654-657 (eval = FALSE)
 ###################################################
-# wb_all_fit <- readRDS("wb_all_fit.rds")
-# wb_all_fit1 <- readRDS("wb_all_fit1.rds")
-wb_fit_all_draws_long <- c(t(-1*wb_all_fit$beta), wb_all_fit$tau2)
-vars <- rep(c(colnames(wb_all_fit$X), "frailtyvar"), each=ncol(wb_all_fit$beta))
-wb_fit1_all_draws_long <- c(t(-1*wb_all_fit1$beta[1:6,]), wb_all_fit1$tau2)
-df <- data.frame(value=c(wb_fit_all_draws_long, wb_fit1_all_draws_long), covariate=factor(c(vars, vars), levels=c("elevation1", "I(elevation1^2)", "f_owntype1sole", "f_sesstatus1lower", "log(medinc)", "f_sizeemp1small", "frailtyvar")), street_dummy=c(rep("no", length(vars)), rep("yes", length(vars))))
-ggplot(df, aes(covariate, y=value, fill=street_dummy)) + geom_boxplot() + facet_wrap(~covariate, scale="free") + geom_hline(yintercept=0, linetype=2)  + theme(plot.background = element_rect(fill = "transparent",colour = NA), legend.background = element_rect(colour = NA, fill = "transparent")) + theme(axis.title.x=element_blank(), axis.text.x=element_blank(), axis.ticks.x=element_blank()) + ylab("")
+set.seed(1)
+suppressMessages(wb_all <- survregbayes(Surv(time = days_mod2, event = status) ~  elevation1 + I(elevation1^2) + f_owntype1 + f_sesstatus1 + log(medinc) + f_sizeemp1 + f_street, data = sf_katrina_41, survmodel = "AFT", dist = "weibull", mcmc = mcmc, prior = prior))
+## # saveRDS(wb_all, "wb_all.rds")
 
 
 ###################################################
-### code chunk number 40: bivand+gomez-rubio_SMij.Rnw:723-739
+### code chunk number 36: bivand+gomez-rubio_SMij.Rnw:662-676 (eval = FALSE)
 ###################################################
-c1 <- summary(wb_all_fit)$coeff[, c(1, 3)]
+## wb_mag <- readRDS("wb_mag.rds")
+## wb_car <- readRDS("wb_car.rds")
+## wb_stc <- readRDS("wb_stc.rds")
+## wb_all_fit1 <- readRDS("wb_all.rds")
+c1 <- summary(wb_mag)$coeff[, c(1, 3)]
 c1[, 1] <- -1*c1[, 1]
-c2 <- summary(wb_all_fit1)$coeff[1:6, c(1, 3)]
+c2 <- summary(wb_car)$coeff[, c(1, 3)]
 c2[, 1] <- -1*c2[, 1]
-res <- rbind(c1, c(summary(wb_all_fit)$frailvar[1, c(1,3)]), c2, c(summary(wb_all_fit1)$frailvar[1, c(1,3)]))
-rownames(res)[c(7, 14)] <- "frailtyvar"
+c3 <- summary(wb_stc)$coeff[, c(1, 3)]
+c3[, 1] <- -1*c3[, 1]
+c4 <- summary(wb_all_fit1)$coeff[1:6, c(1, 3)]
+c4[, 1] <- -1*c4[, 1]
+res <- rbind(c1, c2, c3, c4)
+## # saveRDS(res, "figure_mat_mcmc_plain.rds")
+
+
+###################################################
+### code chunk number 37: bivand+gomez-rubio_SMij.Rnw:680-693
+###################################################
+#res <- readRDS("figure_mat_mcmc_plain.rds")
 dres <- as.data.frame(res)
-dres$covariate <- factor(rownames(res), levels=c("elevation1", "I(elevation1^2)", "f_owntype1sole", "f_sesstatus1lower", "log(medinc)", "f_sizeemp1small", "frailtyvar"))
-dres$street_dummy <- c(rep("no", 7), rep("yes", 7))
+dres$covariate <- factor(rownames(res), levels=c("elevation1", "I(elevation1^2)", "f_owntype1sole", "f_sesstatus1lower", "log(medinc)", "f_sizeemp1small"))
+levels(dres$covariate) <- c("Elevation", "Squared elevation", "Sole owner", "Lower SE status", "Log med. income", "Small firm")
+dres$Street <- factor(rep(c(levels(sf_katrina$f_street), "Pooled"), each=6), levels=c("Magazine Street", "Carrollton Avenue", "St. Claude Avenue", "Pooled"))
 names(dres)[1:2] <- c("mean", "sd")
 dres$ymax <- dres$mean + qnorm(0.975)*dres$sd
 dres$ymin <- dres$mean + qnorm(0.025)*dres$sd
 limits <- aes(ymax = ymax, ymin=ymin)
-ggplot(dres, aes(y=mean, x=covariate, shape=street_dummy)) + geom_point(position=position_dodge(.9), cex=2) + geom_errorbar(limits, position=position_dodge(.9)) + geom_hline(yintercept = 0, linetype=2) + facet_wrap(~covariate, scale="free") + theme(plot.background = element_rect(fill = "transparent",colour = NA), legend.background = element_rect(colour = NA, fill = "transparent")) + theme(axis.title.x=element_blank(), axis.text.x=element_blank(), axis.ticks.x=element_blank()) + ylab("")
+ggplot(dres, aes(y=mean, x=covariate, shape=Street)) + geom_point(position=position_dodge(.9), cex=3) + geom_errorbar(limits, position=position_dodge(.9)) + geom_hline(yintercept = 0, linetype=2) + facet_wrap(~covariate, scale="free") + theme(plot.background = element_rect(fill = "transparent",colour = NA), legend.background = element_rect(colour = NA, fill = "transparent")) + theme(axis.title.x=element_blank(), axis.text.x=element_blank(), axis.ticks.x=element_blank()) + ylab("")
 
 
 ###################################################
-### code chunk number 41: bivand+gomez-rubio_SMij.Rnw:756-760
+### code chunk number 38: bivand+gomez-rubio_SMij.Rnw:706-768
 ###################################################
-mat <- cbind(t(-1*wb_all_fit$beta), wb_all_fit$tau2)
-colnames(mat) <- c(colnames(wb_all_fit$X), "frailtyvar")
-library(coda)
-fit_coda <- mcmc(mat)
+opar <- par(no.readonly = TRUE)
+par(mar=c(4,4,2,1)+0.1)
+cs_wb_mag <- readRDS("cs_wb_mag.rds")
+cs_wb_car <- readRDS("cs_wb_car.rds")
+cs_wb_stc <- readRDS("cs_wb_stc.rds")
+cs_wb_all <- readRDS("cs_wb_all.rds")
+load(file="summary_stuff.RData")
+load(file="alls_summaries.RData")
+opar <- par(mfrow=c(1,4), cex = 1, mar = c(2.1, 2.1, 2.1, 1), cex.lab = 1, cex.axis = 1)
+r.max <- cs_r.maxs[1]
+xlim <- c(0, r.max)
+ylim <- c(0, r.max)
+xx <- seq(0, r.max, 0.01)
+plot(1, type="n", xlim = xlim, ylim = ylim, main="Magazine Street")
+fit <- survival::survfit(cs_wb_mag$resid1 ~ 1)
+lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
+ncurves <- 100
+for (i in 2:ncurves) {
+ fit <- survival::survfit(cs_wb_mag[[i + 1]] ~ 1)
+ lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
+}
+lines(xx, xx, lty = 1, lwd = 2)
+r.max <- cs_r.maxs[2]
+xlim <- c(0, r.max)
+ylim <- c(0, r.max)
+xx <- seq(0, r.max, 0.01)
+plot(1, type="n", xlim = xlim, ylim = ylim, main="Carrollton Avenue")
+fit <- survival::survfit(cs_wb_car$resid1 ~ 1)
+lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
+ncurves <- 100
+for (i in 2:ncurves) {
+ fit <- survival::survfit(cs_wb_car[[i + 1]] ~ 1)
+ lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
+}
+lines(xx, xx, lty = 1, lwd = 2)
+r.max <- cs_r.maxs[3]
+xlim <- c(0, r.max)
+ylim <- c(0, r.max)
+xx <- seq(0, r.max, 0.01)
+plot(1, type="n", xlim = xlim, ylim = ylim, main="St Claude Avenue")
+fit <- survival::survfit(cs_wb_stc$resid1 ~ 1)
+lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
+ncurves <- 100
+for (i in 2:ncurves) {
+ fit <- survival::survfit(cs_wb_stc[[i + 1]] ~ 1)
+ lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
+}
+lines(xx, xx, lty = 1, lwd = 2)
+r.max <- cs_r.max[1]
+xlim <- c(0, r.max)
+ylim <- c(0, r.max)
+xx <- seq(0, r.max, 0.01)
+plot(1, type="n", xlim = xlim, ylim = ylim, main="Pooled")
+fit <- survival::survfit(cs_wb_all$resid1 ~ 1)
+lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
+ncurves <- 100
+for (i in 2:ncurves) {
+ fit <- survival::survfit(cs_wb_all[[i + 1]] ~ 1)
+ lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
+}
+lines(xx, xx, lty = 1, lwd = 2)
+par(opar)
 
 
 ###################################################
-### code chunk number 42: bivand+gomez-rubio_SMij.Rnw:764-769
-###################################################
-oopar <- par(mfrow=c(3, 3))
-plot(fit_coda, density=FALSE, auto.layout=FALSE)
-par(oopar)
-
-
-###################################################
-### code chunk number 43: bivand+gomez-rubio_SMij.Rnw:775-779
-###################################################
-mat <- cbind(t(-1*wb_all_fit1$beta), wb_all_fit1$tau2)
-colnames(mat) <- c(colnames(wb_all_fit1$X), "frailtyvar")
-library(coda)
-fit1_coda <- mcmc(mat)
-
-
-###################################################
-### code chunk number 44: bivand+gomez-rubio_SMij.Rnw:783-788
-###################################################
-oopar <- par(mfrow=c(3, 3))
-plot(fit1_coda, density=FALSE, auto.layout=FALSE)
-par(oopar)
-
-
-###################################################
-### code chunk number 45: bivand+gomez-rubio_SMij.Rnw:816-819
+### code chunk number 39: bivand+gomez-rubio_SMij.Rnw:795-796
 ###################################################
 forma <- ~ elevation1 + I(elevation1^2) + f_owntype1 + f_sesstatus1 + log(medinc) + f_sizeemp1
-prob_fit0_90a <- glm(update(forma, y0_90 ~ .), data=sf_katrina_41, family = binomial(link = "probit"), x=TRUE)
-prob_fit0_90b <- glm(update(forma, y0_90 ~ . + f_street), data=sf_katrina_41, family = binomial(link = "probit"), x=TRUE)
 
 
 ###################################################
-### code chunk number 46: bivand+gomez-rubio_SMij.Rnw:824-827
+### code chunk number 40: bivand+gomez-rubio_SMij.Rnw:799-802
 ###################################################
-forma <- ~ elevation1 + I(elevation1^2) + f_owntype1 + f_sesstatus1 + log(medinc) + f_sizeemp1
-prob_fit0_360a <- glm(update(forma, y0_360 ~ .), data=sf_katrina_41, family = binomial(link = "probit"), x=TRUE)
+prob_fit0_360a_mag <- glm(update(forma, y0_360 ~ .), data=mag, family = binomial(link = "probit"), x=TRUE)
+prob_fit0_360a_car <- glm(update(forma, y0_360 ~ .), data=car, family = binomial(link = "probit"), x=TRUE)
+prob_fit0_360a_stc <- glm(update(forma, y0_360 ~ .), data=stc, family = binomial(link = "probit"), x=TRUE)
+
+
+###################################################
+### code chunk number 41: bivand+gomez-rubio_SMij.Rnw:805-806
+###################################################
 prob_fit0_360b <- glm(update(forma, y0_360 ~ . + f_street), data=sf_katrina_41, family = binomial(link = "probit"), x=TRUE)
 
 
 ###################################################
-### code chunk number 47: bivand+gomez-rubio_SMij.Rnw:831-848
+### code chunk number 42: bivand+gomez-rubio_SMij.Rnw:810-820
 ###################################################
-res_90 <- rbind(summary(prob_fit0_90a)$coefficients[-1,1:2], summary(prob_fit0_90b)$coefficients[-c(1, 8, 9),1:2])
-dres_90 <- as.data.frame(res_90)
-dres_90$covariate <- factor(rownames(res_90), levels=c("elevation1", "I(elevation1^2)", "f_owntype1sole", "f_sesstatus1lower", "log(medinc)", "f_sizeemp1small"))
-dres_90$street_dummy <- c(rep("no", 6), rep("yes", 6))
-dres_90$street_by_days <- paste(dres_90$street_dummy, "90", sep=":")
-names(dres_90)[1:2] <- c("mean", "sd")
-res_360 <- rbind(summary(prob_fit0_360a)$coefficients[-1,1:2], summary(prob_fit0_360b)$coefficients[-c(1, 8, 9),1:2])
+res_360 <- rbind(summary(prob_fit0_360a_mag)$coefficients[-1,1:2], summary(prob_fit0_360a_car)$coefficients[-1,1:2], summary(prob_fit0_360a_stc)$coefficients[-1,1:2], summary(prob_fit0_360b)$coefficients[-c(1, 8, 9),1:2])
 dres_360 <- as.data.frame(res_360)
 dres_360$covariate <- factor(rownames(res_360), levels=c("elevation1", "I(elevation1^2)", "f_owntype1sole", "f_sesstatus1lower", "log(medinc)", "f_sizeemp1small"))
-dres_360$street_dummy <- c(rep("no", 6), rep("yes", 6))
-dres_360$street_by_days <- paste(dres_360$street_dummy, "360", sep=":")
+levels(dres_360$covariate) <- c("Elevation", "Squared elevation", "Sole owner", "Lower SE status", "Log med. income", "Small firm")
+dres_360$Street <- factor(rep(c(levels(sf_katrina$f_street), "Pooled"), each=6), levels=c("Magazine Street", "Carrollton Avenue", "St. Claude Avenue", "Pooled"))
 names(dres_360)[1:2] <- c("mean", "sd")
-dres <- rbind(dres_90, dres_360)
 limits <- aes(ymax = mean + qnorm(0.975)*sd, ymin=mean + qnorm(0.025)*sd)
-ggplot(dres, aes(y=mean, x=covariate, shape=street_by_days)) + geom_point(position=position_dodge(.9), cex=3) + geom_errorbar(limits, position=position_dodge(.9)) + geom_hline(yintercept = 0, linetype=2) + facet_wrap(~covariate, scale="free") + theme(plot.background = element_rect(fill = "transparent",colour = NA), legend.background = element_rect(colour = NA, fill = "transparent")) + theme(axis.title.x=element_blank(), axis.text.x=element_blank(), axis.ticks.x=element_blank()) + ylab("")
+ggplot(dres_360, aes(y=mean, x=covariate, shape=Street)) + geom_point(position=position_dodge(.9), cex=3) + geom_errorbar(limits, position=position_dodge(.9)) + geom_hline(yintercept = 0, linetype=2) + facet_wrap(~covariate, scale="free") + theme(plot.background = element_rect(fill = "transparent",colour = NA), legend.background = element_rect(colour = NA, fill = "transparent")) + theme(axis.title.x=element_blank(), axis.text.x=element_blank(), axis.ticks.x=element_blank()) + ylab("")
 
 
 ###################################################
-### code chunk number 48: bivand+gomez-rubio_SMij.Rnw:861-876
+### code chunk number 43: bivand+gomez-rubio_SMij.Rnw:842-845 (eval = FALSE)
+###################################################
+set.seed(1)
+suppressMessages(wb_iid_fit1 <- survregbayes(Surv(time = days_mod, event = status) ~ elevation1 + I(elevation1^2) + f_owntype1 + f_sesstatus1 + log(medinc) + f_sizeemp1 +  f_street + frailtyprior("iid", all_id), data = sf_katrina_41, survmodel = "AFT", dist = "weibull", mcmc = mcmc, prior = prior))
+## # saveRDS(wb_iid_fit1, "wb_iid_fit1.rds")
+
+
+###################################################
+### code chunk number 44: bivand+gomez-rubio_SMij.Rnw:849-852 (eval = FALSE)
+###################################################
+set.seed(1)
+suppressMessages(wb_iid_mag <- survregbayes(Surv(time = days_mod2, event = status) ~ elevation1 + I(elevation1^2) + f_owntype1 + f_sesstatus1 + log(medinc) + f_sizeemp1 +  frailtyprior("iid", all_id), data = mag, survmodel = "AFT", dist = "weibull", mcmc = mcmc, prior = prior))
+## # saveRDS(wb_iid_mag, "wb_iid_mag.rds")
+
+
+###################################################
+### code chunk number 45: bivand+gomez-rubio_SMij.Rnw:856-859 (eval = FALSE)
+###################################################
+set.seed(1)
+suppressMessages(wb_iid_car <- survregbayes(Surv(time = days_mod2, event = status) ~ elevation1 + I(elevation1^2) + f_owntype1 + f_sesstatus1 + log(medinc) + f_sizeemp1 +  frailtyprior("iid", all_id), data = car, survmodel = "AFT", dist = "weibull", mcmc = mcmc, prior = prior))
+## # saveRDS(wb_iid_car, "wb_iid_car.rds")
+
+
+###################################################
+### code chunk number 46: bivand+gomez-rubio_SMij.Rnw:863-866 (eval = FALSE)
+###################################################
+set.seed(1)
+suppressMessages(wb_iid_stc <- survregbayes(Surv(time = days_mod2, event = status) ~ elevation1 + I(elevation1^2) + f_owntype1 + f_sesstatus1 + log(medinc) + f_sizeemp1 +  frailtyprior("iid", all_id), data = stc, survmodel = "AFT", dist = "weibull", mcmc = mcmc, prior = prior))
+## # saveRDS(wb_iid_stc, "wb_iid_stc.rds")
+
+
+###################################################
+### code chunk number 47: bivand+gomez-rubio_SMij.Rnw:870-885 (eval = FALSE)
+###################################################
+## wb_mag <- readRDS("wb_iid_mag.rds")
+## wb_car <- readRDS("wb_iid_car.rds")
+## wb_stc <- readRDS("wb_iid_stc.rds")
+## wb_all_fit1 <- readRDS("wb_iid_fit1.rds")
+c1 <- summary(wb_mag)$coeff[, c(1, 3)]
+c1[, 1] <- -1*c1[, 1]
+c2 <- summary(wb_car)$coeff[, c(1, 3)]
+c2[, 1] <- -1*c2[, 1]
+c3 <- summary(wb_stc)$coeff[, c(1, 3)]
+c3[, 1] <- -1*c3[, 1]
+c4 <- summary(wb_all_fit1)$coeff[1:6, c(1, 3)]
+c4[, 1] <- -1*c4[, 1]
+res <- rbind(c1, c(summary(wb_mag)$frailvar[1, c(1,3)]), c2, c(summary(wb_car)$frailvar[1, c(1,3)]), c3, c(summary(wb_stc)$frailvar[1, c(1,3)]), c4, c(summary(wb_all_fit1)$frailvar[1, c(1,3)]))
+rownames(res)[c(7, 14, 21, 28)] <- "frailtyvar"
+## # saveRDS(res, file="wb_iid_res.rds")
+
+
+###################################################
+### code chunk number 48: bivand+gomez-rubio_SMij.Rnw:889-902
+###################################################
+#res <- readRDS("wb_iid_res.rds")
+dres <- as.data.frame(res)
+dres$covariate <- factor(rownames(res), levels=c("elevation1", "I(elevation1^2)", "f_owntype1sole", "f_sesstatus1lower", "log(medinc)", "f_sizeemp1small", "frailtyvar"))
+levels(dres$covariate) <- c("Elevation", "Squared elevation", "Sole owner", "Lower SE status", "Log med. income", "Small firm", "IID frailty")
+dres$Street <- factor(rep(c(levels(sf_katrina$f_street), "Pooled"), each=7), levels=c("Magazine Street", "Carrollton Avenue", "St. Claude Avenue", "Pooled"))
+names(dres)[1:2] <- c("mean", "sd")
+dres$ymax <- dres$mean + qnorm(0.975)*dres$sd
+dres$ymin <- dres$mean + qnorm(0.025)*dres$sd
+limits <- aes(ymax = ymax, ymin=ymin)
+ggplot(dres, aes(y=mean, x=covariate, shape=Street)) + geom_point(position=position_dodge(.9), cex=3) + geom_errorbar(limits, position=position_dodge(.9)) + geom_hline(yintercept = 0, linetype=2) + facet_wrap(~covariate, scale="free") + theme(plot.background = element_rect(fill = "transparent",colour = NA), legend.background = element_rect(colour = NA, fill = "transparent")) + theme(axis.title.x=element_blank(), axis.text.x=element_blank(), axis.ticks.x=element_blank()) + ylab("")
+
+
+###################################################
+### code chunk number 49: bivand+gomez-rubio_SMij.Rnw:910-970
+###################################################
+opar <- par(no.readonly = TRUE)
+par(mar=c(4,4,2,1)+0.1)
+cs_wb_mag <- readRDS("cs_wb_iid_mag.rds")
+cs_wb_car <- readRDS("cs_wb_iid_car.rds")
+cs_wb_stc <- readRDS("cs_wb_iid_stc.rds")
+cs_wb_all <- readRDS("cs_wb_all_iid.rds")
+opar <- par(mfrow=c(1,4), cex = 1, mar = c(2.1, 2.1, 2.1, 1), cex.lab = 1, cex.axis = 1)
+r.max <- cs_r.maxs[1]
+xlim <- c(0, r.max)
+ylim <- c(0, r.max)
+xx <- seq(0, r.max, 0.01)
+plot(1, type="n", xlim = xlim, ylim = ylim, main="Magazine Street")
+fit <- survival::survfit(cs_wb_mag$resid1 ~ 1)
+lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
+ncurves <- 100
+for (i in 2:ncurves) {
+ fit <- survival::survfit(cs_wb_mag[[i + 1]] ~ 1)
+ lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
+}
+lines(xx, xx, lty = 1, lwd = 2)
+r.max <- cs_r.maxs[2]
+xlim <- c(0, r.max)
+ylim <- c(0, r.max)
+xx <- seq(0, r.max, 0.01)
+plot(1, type="n", xlim = xlim, ylim = ylim, main="Carrollton Avenue")
+fit <- survival::survfit(cs_wb_car$resid1 ~ 1)
+lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
+ncurves <- 100
+for (i in 2:ncurves) {
+ fit <- survival::survfit(cs_wb_car[[i + 1]] ~ 1)
+ lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
+}
+lines(xx, xx, lty = 1, lwd = 2)
+r.max <- cs_r.maxs[3]
+xlim <- c(0, r.max)
+ylim <- c(0, r.max)
+xx <- seq(0, r.max, 0.01)
+plot(1, type="n", xlim = xlim, ylim = ylim, main="St Claude Avenue")
+fit <- survival::survfit(cs_wb_stc$resid1 ~ 1)
+lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
+ncurves <- 100
+for (i in 2:ncurves) {
+ fit <- survival::survfit(cs_wb_stc[[i + 1]] ~ 1)
+ try(lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey"), silent=TRUE)
+}
+lines(xx, xx, lty = 1, lwd = 2)
+r.max <- cs_r.max[2]
+xlim <- c(0, r.max)
+ylim <- c(0, r.max)
+xx <- seq(0, r.max, 0.01)
+plot(1, type="n", xlim = xlim, ylim = ylim, main="Pooled")
+fit <- survival::survfit(cs_wb_all$resid1 ~ 1)
+lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
+ncurves <- 100
+for (i in 2:ncurves) {
+ fit <- survival::survfit(cs_wb_all[[i + 1]] ~ 1)
+ lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
+}
+lines(xx, xx, lty = 1, lwd = 2)
+par(opar)
+
+
+###################################################
+### code chunk number 50: bivand+gomez-rubio_SMij.Rnw:1024-1034
+###################################################
+library(spdep)
+nb <- knn2nb(knearneigh(sf_katrina_41, k=11), sym=TRUE)
+#nb
+#n.comp.nb(nb)$nc
+E_all <- nb2mat(nb, style="B")
+#tf <- tempfile()
+#nb2INLA(nb, file=tf)
+E_mag <- nb2mat(subset(nb, sf_katrina_41$f_street == "Magazine Street"), style="B")
+E_car <- nb2mat(subset(nb, sf_katrina_41$f_street == "Carrollton Avenue"), style="B")
+E_stc <- nb2mat(subset(nb, sf_katrina_41$f_street == "St. Claude Avenue"), style="B")
+
+
+###################################################
+### code chunk number 51: bivand+gomez-rubio_SMij.Rnw:1038-1041 (eval = FALSE)
+###################################################
+set.seed(1)
+suppressMessages(wb_mag_fit <- survregbayes(Surv(time = days_mod2, event = status) ~  elevation1 + I(elevation1^2) + f_owntype1 + f_sesstatus1 + log(medinc) + f_sizeemp1 + frailtyprior("car", all_id), data = mag, survmodel = "AFT", dist = "weibull", mcmc = mcmc, prior = prior, Proximity= E_mag))
+## # saveRDS(wb_mag_fit, "wb_mag_fit.rds")
+
+
+###################################################
+### code chunk number 52: bivand+gomez-rubio_SMij.Rnw:1045-1048 (eval = FALSE)
+###################################################
+set.seed(1)
+suppressMessages(wb_car_fit <- survregbayes(Surv(time = days_mod2, event = status) ~  elevation1 + I(elevation1^2) + f_owntype1 + f_sesstatus1 + log(medinc) + f_sizeemp1 + frailtyprior("car", all_id), data = car, survmodel = "AFT", dist = "weibull", mcmc = mcmc, prior = prior, Proximity= E_car))
+## # saveRDS(wb_car_fit, "wb_car_fit.rds")
+
+
+###################################################
+### code chunk number 53: bivand+gomez-rubio_SMij.Rnw:1051-1054 (eval = FALSE)
+###################################################
+set.seed(1)
+suppressMessages(wb_stc_fit <- survregbayes(Surv(time = days_mod2, event = status) ~  elevation1 + I(elevation1^2) + f_owntype1 + f_sesstatus1 + log(medinc) + f_sizeemp1 + frailtyprior("car", all_id), data = stc, survmodel = "AFT", dist = "weibull", mcmc = mcmc, prior = prior, Proximity= E_stc))
+## # saveRDS(wb_stc_fit, "wb_stc_fit.rds")
+
+
+###################################################
+### code chunk number 54: bivand+gomez-rubio_SMij.Rnw:1057-1060 (eval = FALSE)
+###################################################
+set.seed(1)
+suppressMessages(wb_all_fit1 <- survregbayes(Surv(time = days_mod1, event = status) ~  elevation1 + I(elevation1^2) + f_owntype1 + f_sesstatus1 + log(medinc) + f_sizeemp1 + f_street + frailtyprior("car", all_id), data = sf_katrina_41, survmodel = "AFT", dist = "weibull", mcmc = mcmc, prior = prior, Proximity= E_all))
+## # saveRDS(wb_all_fit1, "wb_all_fit1.rds")
+
+
+###################################################
+### code chunk number 55: bivand+gomez-rubio_SMij.Rnw:1064-1079 (eval = FALSE)
+###################################################
+## wb_mag <- readRDS("wb_mag_fit.rds")
+## wb_car <- readRDS("wb_car_fit.rds")
+## wb_stc <- readRDS("wb_stc_fit.rds")
+## wb_all_fit1 <- readRDS("wb_all_fit1.rds")
+c1 <- summary(wb_mag)$coeff[, c(1, 3)]
+c1[, 1] <- -1*c1[, 1]
+c2 <- summary(wb_car)$coeff[, c(1, 3)]
+c2[, 1] <- -1*c2[, 1]
+c3 <- summary(wb_stc)$coeff[, c(1, 3)]
+c3[, 1] <- -1*c3[, 1]
+c4 <- summary(wb_all_fit1)$coeff[1:6, c(1, 3)]
+c4[, 1] <- -1*c4[, 1]
+res <- rbind(c1, c(summary(wb_mag)$frailvar[1, c(1,3)]), c2, c(summary(wb_car)$frailvar[1, c(1,3)]), c3, c(summary(wb_stc)$frailvar[1, c(1,3)]), c4, c(summary(wb_all_fit1)$frailvar[1, c(1,3)]))
+rownames(res)[c(7, 14, 21, 28)] <- "frailtyvar"
+## # saveRDS(res, file="wb_car_res.rds")
+
+
+###################################################
+### code chunk number 56: bivand+gomez-rubio_SMij.Rnw:1083-1096
+###################################################
+# res <- readRDS("wb_car_res.rds")
+dres <- as.data.frame(res)
+dres$covariate <- factor(rownames(res), levels=c("elevation1", "I(elevation1^2)", "f_owntype1sole", "f_sesstatus1lower", "log(medinc)", "f_sizeemp1small", "frailtyvar"))
+levels(dres$covariate) <- c("Elevation", "Squared elevation", "Sole owner", "Lower SE status", "Log med. income", "Small firm", "CAR frailty")
+dres$Street <- factor(rep(c(levels(sf_katrina$f_street), "Pooled"), each=7), levels=c("Magazine Street", "Carrollton Avenue", "St. Claude Avenue", "Pooled"))
+#dres$street_dummy <- c(rep("no", 7), rep("yes", 7))
+names(dres)[1:2] <- c("mean", "sd")
+dres$ymax <- dres$mean + qnorm(0.975)*dres$sd
+dres$ymin <- dres$mean + qnorm(0.025)*dres$sd
+limits <- aes(ymax = ymax, ymin=ymin)
+ggplot(dres, aes(y=mean, x=covariate, shape=Street)) + geom_point(position=position_dodge(.9), cex=3) + geom_errorbar(limits, position=position_dodge(.9)) + geom_hline(yintercept = 0, linetype=2) + facet_wrap(~covariate, scale="free") + theme(plot.background = element_rect(fill = "transparent",colour = NA), legend.background = element_rect(colour = NA, fill = "transparent")) + theme(axis.title.x=element_blank(), axis.text.x=element_blank(), axis.ticks.x=element_blank()) + ylab("")
+
+
+###################################################
+### code chunk number 57: bivand+gomez-rubio_SMij.Rnw:1104-1164
+###################################################
+opar <- par(no.readonly = TRUE)
+par(mar=c(4,4,2,1)+0.1)
+cs_wb_mag <- readRDS("cs_wb_mag_fit.rds")
+cs_wb_car <- readRDS("cs_wb_car_fit.rds")
+cs_wb_stc <- readRDS("cs_wb_stc_fit.rds")
+cs_wb_all <- readRDS("cs_wb_all_car.rds")
+opar <- par(mfrow=c(1,4), cex = 1, mar = c(2.1, 2.1, 2.1, 1), cex.lab = 1, cex.axis = 1)
+r.max <- cs_r.maxs[1]
+xlim <- c(0, r.max)
+ylim <- c(0, r.max)
+xx <- seq(0, r.max, 0.01)
+plot(1, type="n", xlim = xlim, ylim = ylim, main="Magazine Street")
+fit <- survival::survfit(cs_wb_mag$resid1 ~ 1)
+lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
+ncurves <- 100
+for (i in 2:ncurves) {
+ fit <- survival::survfit(cs_wb_mag[[i + 1]] ~ 1)
+ lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
+}
+lines(xx, xx, lty = 1, lwd = 2)
+r.max <- cs_r.maxs[2]
+xlim <- c(0, r.max)
+ylim <- c(0, r.max)
+xx <- seq(0, r.max, 0.01)
+plot(1, type="n", xlim = xlim, ylim = ylim, main="Carrollton Avenue")
+fit <- survival::survfit(cs_wb_car$resid1 ~ 1)
+lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
+ncurves <- 100
+for (i in 2:ncurves) {
+ fit <- survival::survfit(cs_wb_car[[i + 1]] ~ 1)
+ lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
+}
+lines(xx, xx, lty = 1, lwd = 2)
+r.max <- cs_r.maxs[3]
+xlim <- c(0, r.max)
+ylim <- c(0, r.max)
+xx <- seq(0, r.max, 0.01)
+plot(1, type="n", xlim = xlim, ylim = ylim, main="St Claude Avenue")
+fit <- survival::survfit(cs_wb_stc$resid1 ~ 1)
+lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
+ncurves <- 100
+for (i in 2:ncurves) {
+ fit <- survival::survfit(cs_wb_stc[[i + 1]] ~ 1)
+ lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
+}
+lines(xx, xx, lty = 1, lwd = 2)
+r.max <- cs_r.max[3]
+xlim <- c(0, r.max)
+ylim <- c(0, r.max)
+xx <- seq(0, r.max, 0.01)
+plot(1, type="n", xlim = xlim, ylim = ylim, main="Pooled")
+fit <- survival::survfit(cs_wb_all$resid1 ~ 1)
+lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
+ncurves <- 100
+for (i in 2:ncurves) {
+ fit <- survival::survfit(cs_wb_all[[i + 1]] ~ 1)
+ lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
+}
+lines(xx, xx, lty = 1, lwd = 2)
+par(opar)
+
+
+###################################################
+### code chunk number 58: bivand+gomez-rubio_SMij.Rnw:1172-1177 (eval = FALSE)
+###################################################
+crds_mag <- st_coordinates(mag)
+crds_mag[which(duplicated(crds_mag)),] <- crds_mag[which(duplicated(crds_mag)),] + c(0.00005, 0.000005)
+set.seed(1)
+suppressMessages(wb_grf_mag <- survregbayes(Surv(time = days_mod2, event = status) ~ elevation1 + I(elevation1^2) + f_owntype1 + fd_sesstatus1 + log(medinc) + f_sizeemp1 +  frailtyprior("grf", all_id), data = mag, survmodel = "AFT", dist = "weibull", mcmc = mcmc, prior = prior, Coordinates=crds_mag, DIST=fields::rdist.earth))
+## # saveRDS(wb_grf_mag, "wb_grf_mag.rds")
+
+
+###################################################
+### code chunk number 59: bivand+gomez-rubio_SMij.Rnw:1182-1187 (eval = FALSE)
+###################################################
+crds_car <- st_coordinates(car)
+crds_car[which(duplicated(crds_car)),] <- crds_car[which(duplicated(crds_car)),] + c(0.00005, 0.000005)
+set.seed(1)
+suppressMessages(wb_grf_car <- survregbayes(Surv(time = days_mod2, event = status) ~ elevation1 + I(elevation1^2) + f_owntype1 + f_sesstatus1 + log(medinc) + f_sizeemp1 +  frailtyprior("grf", all_id), data = car, survmodel = "AFT", dist = "weibull", mcmc = mcmc, prior = prior, Coordinates=crds_car, DIST=fields::rdist.earth))
+## # saveRDS(wb_grf_car, "wb_grf_car.rds")
+
+
+###################################################
+### code chunk number 60: bivand+gomez-rubio_SMij.Rnw:1191-1195 (eval = FALSE)
+###################################################
+crds_stc <- st_coordinates(stc)
+set.seed(1)
+suppressMessages(wb_grf_stc <- survregbayes(Surv(time = days_mod2, event = status) ~ elevation1 + I(elevation1^2) + f_owntype1 + f_sesstatus1 + log(medinc) + f_sizeemp1 +  frailtyprior("grf", all_id), data = stc, survmodel = "AFT", dist = "weibull", mcmc = mcmc, prior = prior, Coordinates=crds_stc, DIST=fields::rdist.earth))
+## # saveRDS(wb_grf_stc, "wb_grf_stc.rds")
+
+
+###################################################
+### code chunk number 61: bivand+gomez-rubio_SMij.Rnw:1199-1204 (eval = FALSE)
+###################################################
+crds <- st_coordinates(st_transform(sf_katrina_41, "EPSG:3452"))
+crds[which(duplicated(crds)),] <- crds[which(duplicated(crds)),] + c(0.5, 0.5)
+set.seed(1)
+suppressMessages(wb_grf_all <- survregbayes(Surv(time = days_mod2, event = status) ~ elevation1 + I(elevation1^2) + f_owntype1 + f_sesstatus1 + log(medinc) + f_sizeemp1 +  frailtyprior("grf", all_id), data = sf_katrina_41, survmodel = "AFT", dist = "weibull", mcmc = mcmc, prior = prior, Coordinates=crds, DIST=fields::rdist))
+## # saveRDS(wb_grf_all, "wb_grf_all.rds")
+
+
+###################################################
+### code chunk number 62: bivand+gomez-rubio_SMij.Rnw:1208-1224 (eval = FALSE)
+###################################################
+## wb_mag <- readRDS("wb_grf_mag.rds")
+## wb_car <- readRDS("wb_grf_car.rds")
+## wb_stc <- readRDS("wb_grf_stc.rds")
+## #wb_all_fit1 <- readRDS("wb_grf_all.rds")
+c1 <- summary(wb_mag)$coeff[, c(1, 3)]
+c1[, 1] <- -1*c1[, 1]
+c2 <- summary(wb_car)$coeff[, c(1, 3)]
+c2[, 1] <- -1*c2[, 1]
+c3 <- summary(wb_stc)$coeff[, c(1, 3)]
+c3[, 1] <- -1*c3[, 1]
+#c4 <- summary(wb_all_fit1)$coeff[1:6, c(1, 3)]
+#c4[, 1] <- -1*c4[, 1]
+res <- rbind(c1, c(summary(wb_mag)$frailvar[1, c(1,3)]), c2, c(summary(wb_car)$frailvar[1, c(1,3)]), c3, c(summary(wb_stc)$frailvar[1, c(1,3)]))#, c4, c(summary(wb_all_fit1)$frailvar[1, c(1,3)]))
+rownames(res)[c(7, 14, 21)] <- "frailtyvar"
+## #rownames(res)[c(7, 14, 21, 28)] <- "frailtyvar"
+## # saveRDS(res, file="wb_grf_res.rds")
+
+
+###################################################
+### code chunk number 63: bivand+gomez-rubio_SMij.Rnw:1228-1243
+###################################################
+.PngNo <- .PngNo + 1
+file <- paste("bivand+gomez-rubio-fig", .PngNo, ".eps", sep="")
+cairo_ps(file=file, width = 7, height = 3.5, pointsize = 10,
+ onefile = TRUE)
+res <- readRDS("wb_grf_res.rds")
+dres <- as.data.frame(res)
+dres$covariate <- factor(rownames(res), levels=c("elevation1", "I(elevation1^2)", "f_owntype1sole", "f_sesstatus1lower", "log(medinc)", "f_sizeemp1small", "frailtyvar"))
+levels(dres$covariate) <- c("Elevation", "Squared elevation", "Sole owner", "Lower SE status", "Log med. income", "Small firm", "GRF frailty")
+#dres$Street <- factor(rep(c(levels(sf_katrina$f_street), "Pooled"), each=7), levels=c("Magazine Street", "Carrollton Avenue", "St. Claude Avenue", "Pooled"))
+#dres$street_dummy <- c(rep("no", 7), rep("yes", 7))
+dres$Street <- factor(rep(c(levels(sf_katrina$f_street)), each=7), levels=c("Magazine Street", "Carrollton Avenue", "St. Claude Avenue"))
+names(dres)[1:2] <- c("mean", "sd")
+names(dres)[1:2] <- c("mean", "sd")
+dres$ymax <- dres$mean + qnorm(0.975)*dres$sd
+dres$ymin <- dres$mean + qnorm(0.025)*dres$sd
+limits <- aes(ymax = ymax, ymin=ymin)
+ggplot(dres, aes(y=mean, x=covariate, shape=Street)) + geom_point(position=position_dodge(.9), cex=3) + geom_errorbar(limits, position=position_dodge(.9)) + geom_hline(yintercept = 0, linetype=2) + facet_wrap(~covariate, scale="free") + theme(plot.background = element_rect(fill = "transparent",colour = NA), legend.background = element_rect(colour = NA, fill = "transparent")) + theme(axis.title.x=element_blank(), axis.text.x=element_blank(), axis.ticks.x=element_blank()) + ylab("")
+dev.null <- dev.off()
+cat("\\includegraphics[width=0.95\\textwidth]{", file, "}\n\n", sep="")
+
+
+###################################################
+### code chunk number 64: bivand+gomez-rubio_SMij.Rnw:1252-1289 (eval = FALSE)
+###################################################
+cs_wb_car <- cox.snell.survregbayes(wb_car, ncurves=100, PLOT=FALSE)
+#saveRDS(cs_wb_car, "cs_wb_car.rds")
+cs_wb_car_fit <- cox.snell.survregbayes(wb_car_fit, ncurves=100, PLOT=FALSE)
+#saveRDS(cs_wb_car_fit, "cs_wb_car_fit.rds")
+cs_wb_iid_car <- cox.snell.survregbayes(wb_iid_car, ncurves=100, PLOT=FALSE)
+#saveRDS(cs_wb_iid_car, "cs_wb_iid_car.rds")
+cs_wb_grf_car <- cox.snell.survregbayes(wb_grf_car, ncurves=100, PLOT=FALSE)
+#saveRDS(cs_wb_grf_car, "cs_wb_grf_car.rds")
+cs_wb_stc <- cox.snell.survregbayes(wb_stc, ncurves=100, PLOT=FALSE)
+#saveRDS(cs_wb_stc, "cs_wb_stc.rds")
+cs_wb_stc_fit <- cox.snell.survregbayes(wb_stc_fit, ncurves=100, PLOT=FALSE)
+#saveRDS(cs_wb_stc_fit, "cs_wb_stc_fit.rds")
+cs_wb_iid_stc <- cox.snell.survregbayes(wb_iid_stc, ncurves=100, PLOT=FALSE)
+#saveRDS(cs_wb_iid_stc, "cs_wb_iid_stc.rds")
+cs_wb_grf_stc <- cox.snell.survregbayes(wb_grf_stc, ncurves=100, PLOT=FALSE)
+#saveRDS(cs_wb_grf_stc, "cs_wb_grf_stc.rds")
+cs_wb_mag <- cox.snell.survregbayes(wb_mag, ncurves=100, PLOT=FALSE)
+#saveRDS(cs_wb_mag, "cs_wb_mag.rds")
+cs_wb_mag_fit <- cox.snell.survregbayes(wb_mag_fit, ncurves=100, PLOT=FALSE)
+#saveRDS(cs_wb_mag_fit, "cs_wb_mag_fit.rds")
+cs_wb_iid_mag <- cox.snell.survregbayes(wb_iid_mag, ncurves=100, PLOT=FALSE)
+#saveRDS(cs_wb_iid_mag, "cs_wb_iid_mag.rds")
+ cs_wb_grf_mag <- cox.snell.survregbayes(wb_grf_mag, ncurves=100, PLOT=FALSE)
+## #saveRDS(cs_wb_grf_mag, "cs_wb_grf_mag.rds")
+models <- c("wb_mag", "wb_iid_mag", "wb_grf_mag", "wb_mag_fit", "wb_car", "wb_iid_car", "wb_grf_car", "wb_car_fit", "wb_stc", "wb_iid_stc", "wb_grf_stc", "wb_stc_fit")
+DICs <- numeric(length(models))
+for (i in seq(along=models)) DICs[i] <- get(models[i])$DIC
+names(DICs) <- models
+pDs <- numeric(length(models))
+for (i in seq(along=models)) pDs[i] <- get(models[i])$pD
+names(pDs) <- models
+cs_r.max <- numeric(length(models))
+for (i in seq(along=models)) cs_r.max[i] <- ceiling(quantile(get(models[i])$Surv.cox.snell[, 1], 0.99)) + 1
+names(cs_r.max) <- models
+cs_r.maxs <- apply(matrix(cs_r.max, nrow=3, byrow=TRUE), 1, max)
+names(cs_r.maxs) <- c("mag", "car", "stc")
+## #save(cs_r.maxs, DICs, pDs, file="summary_stuff.RData")
+
+
+###################################################
+### code chunk number 65: bivand+gomez-rubio_SMij.Rnw:1294-1340
+###################################################
+opar <- par(no.readonly = TRUE)
+par(mar=c(4,4,2,1)+0.1)
+cs_wb_mag <- readRDS("cs_wb_grf_mag.rds")
+cs_wb_car <- readRDS("cs_wb_grf_car.rds")
+cs_wb_stc <- readRDS("cs_wb_grf_stc.rds")
+opar <- par(mfrow=c(1,3), cex = 1, mar = c(2.1, 2.1, 2.1, 1), cex.lab = 1, cex.axis = 1)
+r.max <- cs_r.maxs[1]
+xlim <- c(0, r.max)
+ylim <- c(0, r.max)
+xx <- seq(0, r.max, 0.01)
+plot(1, type="n", xlim = xlim, ylim = ylim, main="Magazine Street")
+fit <- survival::survfit(cs_wb_mag$resid1 ~ 1)
+lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
+ncurves <- 100
+for (i in 2:ncurves) {
+ fit <- survival::survfit(cs_wb_mag[[i + 1]] ~ 1)
+ lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
+}
+lines(xx, xx, lty = 1, lwd = 2)
+r.max <- cs_r.maxs[2]
+xlim <- c(0, r.max)
+ylim <- c(0, r.max)
+xx <- seq(0, r.max, 0.01)
+plot(1, type="n", xlim = xlim, ylim = ylim, main="Carrollton Avenue")
+fit <- survival::survfit(cs_wb_car$resid1 ~ 1)
+lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
+ncurves <- 100
+for (i in 2:ncurves) {
+ fit <- survival::survfit(cs_wb_car[[i + 1]] ~ 1)
+ lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
+}
+lines(xx, xx, lty = 1, lwd = 2)
+r.max <- cs_r.maxs[3]
+xlim <- c(0, r.max)
+ylim <- c(0, r.max)
+xx <- seq(0, r.max, 0.01)
+plot(1, type="n", xlim = xlim, ylim = ylim, main="St Claude Avenue")
+fit <- survival::survfit(cs_wb_stc$resid1 ~ 1)
+lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
+ncurves <- 100
+for (i in 2:ncurves) {
+ fit <- survival::survfit(cs_wb_stc[[i + 1]] ~ 1)
+ lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
+}
+lines(xx, xx, lty = 1, lwd = 2)
+par(opar)
+
+
+###################################################
+### code chunk number 66: bivand+gomez-rubio_SMij.Rnw:1368-1372
+###################################################
+mat <- cbind(matrix(DICs, ncol=3)[c(1,2,4,3),], c(alls_DIC, NA))
+colnames(mat) <- c(names(streets_41), "Pooled")
+rownames(mat) <- c("None", "IID", "CAR", "GRF")
+print(xtable(mat, align=c("l","r","r","r", "r")), floating=FALSE, comment=FALSE, sanitize.text.function=function(x){x}, hline.after=c(-1,0,4))
+
+
+###################################################
+### code chunk number 67: bivand+gomez-rubio_SMij.Rnw:1386-1398
 ###################################################
 suppressPackageStartupMessages(library(spatialreg))
 W <- as(nb2listw(nb, style="W"), "CsparseMatrix")
 suppressPackageStartupMessages(library(ProbitSpatial))
 tf <- tempfile()
-suppressWarnings(capture.output(SemProb_fit0_90a <- SpatialProbitFit(update(forma, y0_90 ~ .), data=sf_katrina_41, W=W, DGP="SEM", method="full-lik"), file=tf))
-sp_res90a <- read.table(tf, skip=3, header=FALSE)[1:6,1:3]
-tf <- tempfile()
-suppressWarnings(capture.output(SemProb_fit0_90b <- SpatialProbitFit(update(forma, y0_90 ~ . + f_street), data=sf_katrina_41, W=W, DGP="SEM", method="full-lik"), file=tf))
-sp_res90b <- read.table(tf, skip=3, header=FALSE, fill=TRUE, nrows=6)[,1:3]
-tf <- tempfile()
-suppressWarnings(capture.output(SemProb_fit0_360a <- SpatialProbitFit(update(forma, y0_360 ~ .), data=sf_katrina_41, W=W, DGP="SEM", method="full-lik"), file=tf))
-sp_res360a <- read.table(tf, skip=3, header=FALSE)[1:6,1:3]
-tf <- tempfile()
 suppressWarnings(capture.output(SemProb_fit0_360c <- SpatialProbitFit(update(forma, y0_360 ~ . + f_street), data=sf_katrina_41, W=W, DGP="SEM", method="full-lik"), file=tf))
 sp_res360b <- read.table(tf, skip=3, header=FALSE, fill=TRUE, nrows=6)[,1:3]
+suppressWarnings(capture.output(SemProb_fit0_360a_mag <- SpatialProbitFit(update(forma, y0_360 ~ .), data=mag, W=as(E_mag/rowSums(E_mag), "CsparseMatrix"), DGP="SEM", method="full-lik", varcov="varcov"), file=tf))
+sp_res360a_mag <- read.table(tf, skip=3, header=FALSE, fill=TRUE, nrows=6)[,1:3]
+suppressWarnings(capture.output(SemProb_fit0_360a_car <- SpatialProbitFit(update(forma, y0_360 ~ .), data=car, W=as(E_car/rowSums(E_car), "CsparseMatrix"), DGP="SEM", method="full-lik", varcov="varcov"), file=tf))
+sp_res360a_car <- read.table(tf, skip=3, header=FALSE, fill=TRUE, nrows=6)[,1:3]
+suppressWarnings(capture.output(SemProb_fit0_360a_stc <- SpatialProbitFit(update(forma, y0_360 ~ .), data=stc, W=as(E_stc/rowSums(E_stc), "CsparseMatrix"), DGP="SEM", method="full-lik", varcov="varcov"), file=tf))
+sp_res360a_stc <- read.table(tf, skip=3, header=FALSE, fill=TRUE, nrows=6)[,1:3]
 
 
 ###################################################
-### code chunk number 49: bivand+gomez-rubio_SMij.Rnw:880-897
+### code chunk number 68: bivand+gomez-rubio_SMij.Rnw:1402-1412
 ###################################################
-sp_res_90 <- rbind(sp_res90a, sp_res90b)
-sp_dres_90 <- as.data.frame(sp_res_90)
-sp_dres_90$covariate <- factor(as.character(sp_dres_90$V1), levels=c("elevation1", "I(elevation1^2)", "f_owntype1sole", "f_sesstatus1lower", "log(medinc)", "f_sizeemp1small"))
-sp_dres_90$street_dummy <- c(rep("no", 6), rep("yes", 6))
-names(sp_dres_90)[2:3] <- c("mean", "sd")
-sp_dres_90$street_by_days <- paste(sp_dres_90$street_dummy, "90", sep=":")
-sp_res_360 <- rbind(sp_res360a, sp_res360b)
+sp_res_360 <- rbind(sp_res360a_mag, sp_res360a_car, sp_res360a_stc, sp_res360b)
 sp_dres_360 <- as.data.frame(sp_res_360)
 sp_dres_360$covariate <- factor(as.character(sp_dres_360$V1), levels=c("elevation1", "I(elevation1^2)", "f_owntype1sole", "f_sesstatus1lower", "log(medinc)", "f_sizeemp1small"))
-sp_dres_360$street_dummy <- c(rep("no", 6), rep("yes", 6))
+levels(sp_dres_360$covariate) <- c("Elevation", "Squared elevation", "Sole owner", "Lower SE status", "Log med. income", "Small firm")
+sp_dres_360$Street <- factor(rep(c(levels(sf_katrina$f_street), "Pooled"), each=6), levels=c("Magazine Street", "Carrollton Avenue", "St. Claude Avenue", "Pooled"))
 names(sp_dres_360)[2:3] <- c("mean", "sd")
-sp_dres_360$street_by_days <- paste(sp_dres_360$street_dummy, "360", sep=":")
-sp_dres <- rbind(sp_dres_90, sp_dres_360)
 limits <- aes(ymax = mean + qnorm(0.975)*sd, ymin=mean + qnorm(0.025)*sd)
-ggplot(sp_dres, aes(y=mean, x=covariate, shape=street_by_days)) + geom_point(position=position_dodge(.9), cex=3) + geom_errorbar(limits, position=position_dodge(.9)) + geom_hline(yintercept = 0, linetype=2) + facet_wrap(~covariate, scale="free") + theme(plot.background = element_rect(fill = "transparent",colour = NA), legend.background = element_rect(colour = NA, fill = "transparent")) + theme(axis.title.x=element_blank(), axis.text.x=element_blank(), axis.ticks.x=element_blank()) + ylab("")
+ggplot(sp_dres_360, aes(y=mean, x=covariate, shape=Street)) + geom_point(position=position_dodge(.9), cex=3) + geom_errorbar(limits, position=position_dodge(.9)) + geom_hline(yintercept = 0, linetype=2) + facet_wrap(~covariate, scale="free") + theme(plot.background = element_rect(fill = "transparent",colour = NA), legend.background = element_rect(colour = NA, fill = "transparent")) + theme(axis.title.x=element_blank(), axis.text.x=element_blank(), axis.ticks.x=element_blank()) + ylab("")
+
+
+###################################################
+### code chunk number 69: bivand+gomez-rubio_SMij.Rnw:1480-1483
+###################################################
+mat <- prop.table(table(sf_katrina$f_sizeemp, sf_katrina$f_street), margin=2)*100
+rownames(mat) <- c("average", "large", "small")
+print(xtable(mat[c(3,1,2),], align=c("l","r","r","r"), digits=c(NA, 2, 2, 2), display=c("s", "f", "f", "f")), floating=FALSE, comment=FALSE, sanitize.text.function=function(x){x}, hline.after=c(-1,0,3))
+
+
+###################################################
+### code chunk number 70: bivand+gomez-rubio_SMij.Rnw:1495-1497
+###################################################
+mat <- prop.table(table(sf_katrina$f_owntype, sf_katrina$f_street), margin=2)*100
+print(xtable(mat[c(3,1,2),], align=c("l","r","r","r"), digits=c(NA, 2, 2, 2), display=c("s", "f", "f", "f")), floating=FALSE, comment=FALSE, sanitize.text.function=function(x){x}, hline.after=c(-1,0,3))
+
+
+###################################################
+### code chunk number 71: bivand+gomez-rubio_SMij.Rnw:1509-1512
+###################################################
+mat <- prop.table(table(sf_katrina$f_sesstatus, sf_katrina$f_street), margin=2)*100
+rownames(mat) <- c("average", "lower", "upper")
+print(xtable(mat[c(2,1,3),], align=c("l","r","r","r"), digits=c(NA, 2, 2, 2), display=c("s", "f", "f", "f")), floating=FALSE, comment=FALSE, sanitize.text.function=function(x){x}, hline.after=c(-1,0,3))
+
+
+###################################################
+### code chunk number 72: bivand+gomez-rubio_SMij.Rnw:1519-1524
+###################################################
+opar <- par(no.readonly = TRUE)
+par(mar=c(4,4,2,1)+0.1)
+oopar <- par(las=1, mar=c(4, 10, 4, 2))
+boxplot(flood ~ f_street, sf_katrina, varwidth=TRUE, horizontal=TRUE, ylab="", xlab="flood")
+par(oopar)
+par(opar)
+
+
+###################################################
+### code chunk number 73: bivand+gomez-rubio_SMij.Rnw:1531-1536
+###################################################
+opar <- par(no.readonly = TRUE)
+par(mar=c(4,4,2,1)+0.1)
+oopar <- par(las=1, mar=c(4, 10, 4, 2))
+boxplot(elevation1 ~ f_street, sf_katrina, varwidth=TRUE, horizontal=TRUE, ylab="", xlab="elevation")
+par(oopar)
+par(opar)
 
 
