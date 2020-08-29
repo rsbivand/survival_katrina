@@ -1,9 +1,8 @@
 # survival_katrina
 
-Runnable R script derived from submission manuscript June 2020. Run time 9-12 hours.
+Runnable R script derived from submission manuscript August 2020. Run time 9-12 hours. Very recent INLA version required to extract DIC in these cases.
 
 ```
-> sessionInfo()
 R version 4.0.2 (2020-06-22)
 Platform: x86_64-pc-linux-gnu (64-bit)
 Running under: Fedora 32 (Workstation Edition)
@@ -25,36 +24,44 @@ attached base packages:
 [8] methods   base     
 
 other attached packages:
- [1] ProbitSpatial_1.0    speedglm_0.3-2       MASS_7.3-51.6       
- [4] Rcpp_1.0.4.6         spatialreg_1.1-6     spBayesSurv_1.1.4   
- [7] INLA_20.03.17        foreach_1.5.0        ggfortify_0.4.10    
+ [1] ProbitSpatial_1.0    speedglm_0.3-2       MASS_7.3-52         
+ [4] Rcpp_1.0.5           spatialreg_1.1-6     spBayesSurv_1.1.4   
+ [7] INLA_20.08.11-1      foreach_1.5.0        ggfortify_0.4.10    
 [10] ggplot2_3.3.2        zoo_1.8-8            survival_3.2-3      
-[13] car_3.0-8            carData_3.0-4        xtable_1.8-4        
-[16] spatialprobit_0.9-11 tmvtnorm_1.4-10      gmm_1.6-5           
-[19] sandwich_2.5-1       mvtnorm_1.1-1        spdep_1.1-5         
-[22] sf_0.9-4             spData_0.3.5         sp_1.4-3            
-[25] Matrix_1.2-18       
+[13] car_3.0-9            carData_3.0-4        mapview_2.9.1       
+[16] xtable_1.8-4         spatialprobit_0.9-11 tmvtnorm_1.4-10     
+[19] gmm_1.6-5            sandwich_2.5-1       mvtnorm_1.1-1       
+[22] spdep_1.1-5          sf_0.9-6             spData_0.3.8        
+[25] sp_1.4-4             Matrix_1.2-18       
 
 loaded via a namespace (and not attached):
- [1] tidyr_1.1.0         splines_4.0.2       gtools_3.8.2       
- [4] expm_0.999-4        cellranger_1.1.0    LearnBayes_2.15.1  
- [7] numDeriv_2016.8-1.1 pillar_1.4.4        lattice_0.20-41    
-[10] glue_1.4.1          colorspace_1.4-1    spDataLarge_0.4.1  
-[13] pkgconfig_2.0.3     raster_3.3-7        haven_2.3.1        
-[16] gmodels_2.18.1      purrr_0.3.4         scales_1.1.1       
-[19] RANN_2.6.1          gdata_2.18.0        openxlsx_4.1.5     
-[22] rio_0.5.16          tibble_3.0.1        generics_0.0.2     
-[25] ellipsis_0.3.1      withr_2.2.0         magrittr_1.5       
-[28] crayon_1.3.4        readxl_1.3.1        deldir_0.1-25      
-[31] nlme_3.1-148        forcats_0.5.0       foreign_0.8-80     
-[34] class_7.3-17        tools_4.0.2         data.table_1.12.8  
-[37] hms_0.5.3           lifecycle_0.2.0     stringr_1.4.0      
-[40] munsell_0.5.0       zip_2.0.4           compiler_4.0.2     
-[43] e1071_1.7-3         rlang_0.4.6         classInt_0.4-3     
-[46] units_0.6-7         grid_4.0.2          iterators_1.0.12   
-[49] boot_1.3-25         gtable_0.3.0        codetools_0.2-16   
-[52] abind_1.4-5         DBI_1.1.0           curl_4.3           
-[55] R6_2.4.1            gridExtra_2.3       dplyr_1.0.0        
-[58] KernSmooth_2.23-17  stringi_1.4.6       vctrs_0.3.1        
-[61] tidyselect_1.1.0    coda_0.19-3        
+ [1] nlme_3.1-148            satellite_1.0.2         webshot_0.5.2          
+ [4] gmodels_2.18.1          numDeriv_2016.8-1.1     Deriv_4.0              
+ [7] tools_4.0.2             R6_2.4.1                KernSmooth_2.23-17     
+[10] DBI_1.1.0               colorspace_1.4-1        raster_3.3-13          
+[13] withr_2.2.0             tidyselect_1.1.0        gridExtra_2.3          
+[16] leaflet_2.0.3           curl_4.3                compiler_4.0.2         
+[19] leafem_0.1.3            expm_0.999-5            labeling_0.3           
+[22] scales_1.1.1            classInt_0.4-3          systemfonts_0.2.3      
+[25] stringr_1.4.0           digest_0.6.25           foreign_0.8-80         
+[28] svglite_1.2.3.2         rio_0.5.16              base64enc_0.1-3        
+[31] pkgconfig_2.0.3         htmltools_0.5.0         htmlwidgets_1.5.1      
+[34] rlang_0.4.7             readxl_1.3.1            farver_2.0.3           
+[37] generics_0.0.2          jsonlite_1.7.0          crosstalk_1.1.0.1      
+[40] gtools_3.8.2            dplyr_1.0.2             zip_2.1.0              
+[43] magrittr_1.5            munsell_0.5.0           abind_1.4-5            
+[46] gdtools_0.2.2           lifecycle_0.2.0         stringi_1.4.6          
+[49] yaml_2.2.1              grid_4.0.2              gdata_2.18.0           
+[52] forcats_0.5.0           crayon_1.3.4            deldir_0.1-28          
+[55] lattice_0.20-41         haven_2.3.1             splines_4.0.2          
+[58] hms_0.5.3               leafpop_0.0.5           pillar_1.4.6           
+[61] uuid_0.1-4              boot_1.3-25             codetools_0.2-16       
+[64] LearnBayes_2.15.1       glue_1.4.1              leaflet.providers_1.9.0
+[67] data.table_1.13.0       png_0.1-7               vctrs_0.3.2            
+[70] MatrixModels_0.4-1      cellranger_1.1.0        RANN_2.6.1             
+[73] gtable_0.3.0            purrr_0.3.4             tidyr_1.1.1            
+[76] openxlsx_4.1.5          e1071_1.7-3             coda_0.19-3            
+[79] class_7.3-17            tibble_3.0.3            iterators_1.0.12       
+[82] units_0.6-7             ellipsis_0.3.1          brew_1.0-6             
+[85] spDataLarge_0.4.1      
 ```
