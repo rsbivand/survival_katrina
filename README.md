@@ -1,6 +1,6 @@
 # survival_katrina
 
-Runnable R script derived from submission manuscript August 2020. Run time 9-12 hours. Very recent INLA version required to extract DIC in these cases.
+Runnable R script derived from submission manuscript August 2020. Run time 9-12 hours, 16GB RAM required. Very recent INLA version required to extract DIC in these cases.
 
 ```
 R version 4.0.2 (2020-06-22)
