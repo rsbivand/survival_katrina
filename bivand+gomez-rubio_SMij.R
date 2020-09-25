@@ -359,15 +359,20 @@ saveRDS(dens, file="mcmc_st_iid_densities.rds")
 ###################################################
 ### code chunk number 77: bivand+gomez-rubio_SMij.Rnw:1698-1735 (eval = FALSE)
 ###################################################
-cs_wb_car <- cox.snell.survregbayes(wb_car, ncurves=100, PLOT=FALSE)
+set.seed(1)
+cs_wb_car <- cox.snell.survregbayes(wb_car, ncurves=250, PLOT=FALSE)
 saveRDS(cs_wb_car, "cs_wb_car.rds")
-cs_wb_stc <- cox.snell.survregbayes(wb_stc, ncurves=100, PLOT=FALSE)
+set.seed(1)
+cs_wb_stc <- cox.snell.survregbayes(wb_stc, ncurves=250, PLOT=FALSE)
 saveRDS(cs_wb_stc, "cs_wb_stc.rds")
-cs_wb_mag <- cox.snell.survregbayes(wb_mag, ncurves=100, PLOT=FALSE)
+set.seed(1)
+cs_wb_mag <- cox.snell.survregbayes(wb_mag, ncurves=250, PLOT=FALSE)
 saveRDS(cs_wb_mag, "cs_wb_mag.rds")
-cs_wb_all <- cox.snell.survregbayes(wb_all_fit1, ncurves=100, PLOT=FALSE)
+set.seed(1)
+cs_wb_all <- cox.snell.survregbayes(wb_all_fit1, ncurves=250, PLOT=FALSE)
 saveRDS(cs_wb_all, file="cs_wb_all_nostreet.rds")
-cs_wb_stiid <- cox.snell.survregbayes(wb_all_stiid, ncurves=100, PLOT=FALSE)
+set.seed(1)
+cs_wb_stiid <- cox.snell.survregbayes(wb_all_stiid, ncurves=250, PLOT=FALSE)
 saveRDS(cs_wb_stiid, file="cs_wb_stiid.rds")
 
 
@@ -474,13 +479,13 @@ dev.off()
 ### code chunk number 77: bivand+gomez-rubio_SMij.Rnw:1698-1735 (eval = FALSE)
 ###################################################
 set.seed(1)
-cs_wb_car <- cox.snell.survregbayes(wb_car, ncurves=100, PLOT=FALSE)
+cs_wb_car <- cox.snell.survregbayes(wb_car, ncurves=250, PLOT=FALSE)
 saveRDS(cs_wb_car, "cs_wb_car.rds")
 set.seed(1)
-cs_wb_stc <- cox.snell.survregbayes(wb_stc, ncurves=100, PLOT=FALSE)
+cs_wb_stc <- cox.snell.survregbayes(wb_stc, ncurves=250, PLOT=FALSE)
 saveRDS(cs_wb_stc, "cs_wb_stc.rds")
 set.seed(1)
-cs_wb_mag <- cox.snell.survregbayes(wb_mag, ncurves=100, PLOT=FALSE)
+cs_wb_mag <- cox.snell.survregbayes(wb_mag, ncurves=250, PLOT=FALSE)
 saveRDS(cs_wb_mag, "cs_wb_mag.rds")
 
 
@@ -492,12 +497,12 @@ cs_wb_car <- readRDS("cs_wb_car.rds")
 cs_wb_stc <- readRDS("cs_wb_stc.rds")
 wb_all_fit1 <- readRDS("wb_all_nostreet_plain.rds")
 set.seed(1)
-cs_wb_all <- cox.snell.survregbayes(wb_all_fit1, ncurves=100, PLOT=FALSE)
+cs_wb_all <- cox.snell.survregbayes(wb_all_fit1, ncurves=250, PLOT=FALSE)
 saveRDS(cs_wb_all, file="cs_wb_all_nostreet.rds")
 cs_wb_all <- readRDS("cs_wb_all_nostreet.rds")
 wb_all_stiid <- readRDS("wb_all_nostreet_iidst.rds")
 set.seed(1)
-cs_wb_stiid <- cox.snell.survregbayes(wb_all_stiid, ncurves=100, PLOT=FALSE)
+cs_wb_stiid <- cox.snell.survregbayes(wb_all_stiid, ncurves=250, PLOT=FALSE)
 saveRDS(cs_wb_stiid, file="cs_wb_stiid.rds")
 cs_wb_stiid <- readRDS("cs_wb_stiid.rds")
 #saveRDS(cs_wb_grf_mag, "cs_wb_grf_mag.rds")
@@ -505,70 +510,70 @@ cs_wb_stiid <- readRDS("cs_wb_stiid.rds")
 #(load(file="summary_stuff.RData"))
 #(load(file="alls_summaries.RData"))
 pdf(file = "fig5.pdf")
-opar <- par(mfrow=c(1,5), cex = 1, mar = c(2.1, 2.1, 2.1, 1), cex.lab = 1, cex.axis = 1)
+opar <- par(mfrow=c(2,3), cex = 1, mar = c(2.1, 2.1, 2.1, 1), cex.lab = 1, cex.axis = 1, xaxs="i", yaxs="i")
 r.max <- 4
 xlim <- c(0, r.max)
 ylim <- c(0, r.max)
 xx <- seq(0, r.max, 0.01)
-plot(1, type="n", xlim = xlim, ylim = ylim, main="Magazine St")
+plot(1, type="n", xlim = xlim, ylim = ylim, main="Magazine St", asp=1)
 fit <- survival::survfit(cs_wb_mag$resid1 ~ 1)
-lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
-ncurves <- 100
+lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="#BEBEBE64")
+ncurves <- 250
 for (i in 2:ncurves) {
  fit <- survival::survfit(cs_wb_mag[[i + 1]] ~ 1)
- lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
+ lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="#BEBEBE64")
 }
 lines(xx, xx, lty = 1, lwd = 2)
 r.max <- 4
 xlim <- c(0, r.max)
 ylim <- c(0, r.max)
 xx <- seq(0, r.max, 0.01)
-plot(1, type="n", xlim = xlim, ylim = ylim, main="Carrollton Ave")
+plot(1, type="n", xlim = xlim, ylim = ylim, main="Carrollton Ave", asp=1)
 fit <- survival::survfit(cs_wb_car$resid1 ~ 1)
-lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
-ncurves <- 100
+lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="#BEBEBE64")
+ncurves <- 250
 for (i in 2:ncurves) {
  fit <- survival::survfit(cs_wb_car[[i + 1]] ~ 1)
- lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
+ lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="#BEBEBE64")
 }
 lines(xx, xx, lty = 1, lwd = 2)
 r.max <- 4
 xlim <- c(0, r.max)
 ylim <- c(0, r.max)
 xx <- seq(0, r.max, 0.01)
-plot(1, type="n", xlim = xlim, ylim = ylim, main="St Claude Ave")
+plot(1, type="n", xlim = xlim, ylim = ylim, main="St Claude Ave", asp=1)
 fit <- survival::survfit(cs_wb_stc$resid1 ~ 1)
-lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
-ncurves <- 100
+lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="#BEBEBE64")
+ncurves <- 250
 for (i in 2:ncurves) {
  fit <- survival::survfit(cs_wb_stc[[i + 1]] ~ 1)
- lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
+ lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="#BEBEBE64")
 }
 lines(xx, xx, lty = 1, lwd = 2)
 r.max <- 4
 xlim <- c(0, r.max)
 ylim <- c(0, r.max)
 xx <- seq(0, r.max, 0.01)
-plot(1, type="n", xlim = xlim, ylim = ylim, main="Pooled")
+plot(1, type="n", xlim = xlim, ylim = ylim, main="Pooled", asp=1)
 fit <- survival::survfit(cs_wb_all$resid1 ~ 1)
-lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
-ncurves <- 100
+lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="#BEBEBE64")
+ncurves <- 250
 for (i in 2:ncurves) {
  fit <- survival::survfit(cs_wb_all[[i + 1]] ~ 1)
- lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
+ lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="#BEBEBE64")
 }
 lines(xx, xx, lty = 1, lwd = 2)
 r.max <- 4
 xlim <- c(0, r.max)
 ylim <- c(0, r.max)
 xx <- seq(0, r.max, 0.01)
-plot(1, type="n", xlim = xlim, ylim = ylim, main="Street IID")
+plot(1, type="n", xlim = xlim, ylim = ylim, main="Street IID", asp=1)
 fit <- survival::survfit(cs_wb_stiid$resid1 ~ 1)
-lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
-ncurves <- 100
+lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="#BEBEBE64")
+ncurves <- 250
 for (i in 2:ncurves) {
  fit <- survival::survfit(cs_wb_stiid[[i + 1]] ~ 1)
- lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
+ lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="#BEBEBE64")
 }
 lines(xx, xx, lty = 1, lwd = 2)
 par(opar)
@@ -724,14 +729,14 @@ res <- rbind(c1, c(summary(wb_mag)$frailvar[1, c(1,3:5)]), c2, c(summary(wb_car)
 rownames(res)[c(7, 14, 21, 28)] <- "frailtyvar"
 saveRDS(res, file="wb_iid_res.rds")
 
-set.seed(1)
-cs_wb_iid_car <- cox.snell.survregbayes(wb_car, ncurves=100, PLOT=FALSE)
+set.seed(567890)
+cs_wb_iid_car <- cox.snell.survregbayes(wb_car, ncurves=250, PLOT=FALSE)
 saveRDS(cs_wb_iid_car, "cs_wb_iid_car.rds")
 set.seed(1)
-cs_wb_iid_stc <- cox.snell.survregbayes(wb_stc, ncurves=100, PLOT=FALSE)
+cs_wb_iid_stc <- cox.snell.survregbayes(wb_stc, ncurves=250, PLOT=FALSE)
 saveRDS(cs_wb_iid_stc, "cs_wb_iid_stc.rds")
 set.seed(1)
-cs_wb_iid_mag <- cox.snell.survregbayes(wb_mag, ncurves=100, PLOT=FALSE)
+cs_wb_iid_mag <- cox.snell.survregbayes(wb_mag, ncurves=250, PLOT=FALSE)
 saveRDS(cs_wb_iid_mag, "cs_wb_iid_mag.rds")
 
 
@@ -839,61 +844,61 @@ cs_wb_car <- readRDS("cs_wb_iid_car.rds")
 cs_wb_stc <- readRDS("cs_wb_iid_stc.rds")
 wb_iid_fit1_nostreet <- readRDS("wb_iid_fit1_nostreet.rds")
 set.seed(1)
-cs_wb_all  <- cox.snell.survregbayes(wb_iid_fit1_nostreet, ncurves=100, PLOT=FALSE)
+cs_wb_all  <- cox.snell.survregbayes(wb_iid_fit1_nostreet, ncurves=250, PLOT=FALSE)
 saveRDS(cs_wb_all, file="cs_wb_iid_nostreet.rds")
 cs_wb_all <- readRDS("cs_wb_iid_nostreet.rds")
 pdf(file = "fig8.pdf")
-opar <- par(mfrow=c(1,4), cex = 1, mar = c(2.1, 2.1, 2.1, 1), cex.lab = 1, cex.axis = 1)
+opar <- par(mfrow=c(2,3), cex = 1, mar = c(2.1, 2.1, 2.1, 1), cex.lab = 1, cex.axis = 1, xaxs="i", yaxs="i")
 r.max <- 4
 xlim <- c(0, r.max)
 ylim <- c(0, r.max)
 xx <- seq(0, r.max, 0.01)
-plot(1, type="n", xlim = xlim, ylim = ylim, main="Magazine Street")
+plot(1, type="n", xlim = xlim, ylim = ylim, main="Magazine Street", asp=1)
 fit <- survival::survfit(cs_wb_mag$resid1 ~ 1)
-lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
-ncurves <- 100
+lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="#BEBEBE64")
+ncurves <- 250
 for (i in 2:ncurves) {
  fit <- survival::survfit(cs_wb_mag[[i + 1]] ~ 1)
- lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
+ lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="#BEBEBE64")
 }
 lines(xx, xx, lty = 1, lwd = 2)
 r.max <- 4
 xlim <- c(0, r.max)
 ylim <- c(0, r.max)
 xx <- seq(0, r.max, 0.01)
-plot(1, type="n", xlim = xlim, ylim = ylim, main="Carrollton Avenue")
+plot(1, type="n", xlim = xlim, ylim = ylim, main="Carrollton Avenue", asp=1)
 fit <- survival::survfit(cs_wb_car$resid1 ~ 1)
-lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
-ncurves <- 100
+lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="#BEBEBE64")
+ncurves <- 250
 for (i in 2:ncurves) {
  fit <- survival::survfit(cs_wb_car[[i + 1]] ~ 1)
- lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
+ lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="#BEBEBE64")
 }
 lines(xx, xx, lty = 1, lwd = 2)
 r.max <- 4
 xlim <- c(0, r.max)
 ylim <- c(0, r.max)
 xx <- seq(0, r.max, 0.01)
-plot(1, type="n", xlim = xlim, ylim = ylim, main="St Claude Avenue")
+plot(1, type="n", xlim = xlim, ylim = ylim, main="St Claude Avenue", asp=1)
 fit <- survival::survfit(cs_wb_stc$resid1 ~ 1)
-lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
-ncurves <- 100
+lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="#BEBEBE64")
+ncurves <- 250
 for (i in 2:ncurves) {
  fit <- survival::survfit(cs_wb_stc[[i + 1]] ~ 1)
- try(lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey"), silent=TRUE)
+ try(lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="#BEBEBE64"), silent=TRUE)
 }
 lines(xx, xx, lty = 1, lwd = 2)
 r.max <- 4
 xlim <- c(0, r.max)
 ylim <- c(0, r.max)
 xx <- seq(0, r.max, 0.01)
-plot(1, type="n", xlim = xlim, ylim = ylim, main="Pooled")
+plot(1, type="n", xlim = xlim, ylim = ylim, main="Pooled", asp=1)
 fit <- survival::survfit(cs_wb_all$resid1 ~ 1)
-lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
-ncurves <- 100
+lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="#BEBEBE64")
+ncurves <- 250
 for (i in 2:ncurves) {
  fit <- survival::survfit(cs_wb_all[[i + 1]] ~ 1)
- lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
+ lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="#BEBEBE64")
 }
 lines(xx, xx, lty = 1, lwd = 2)
 par(opar)
@@ -1053,13 +1058,13 @@ saveRDS(res, file="wb_car_res.rds")
 ## 
 
 set.seed(1)
-cs_wb_car_fit <- cox.snell.survregbayes(wb_car, ncurves=100, PLOT=FALSE)
+cs_wb_car_fit <- cox.snell.survregbayes(wb_car, ncurves=250, PLOT=FALSE)
 saveRDS(cs_wb_car_fit, "cs_wb_car_fit.rds")
 set.seed(1)
-cs_wb_stc_fit <- cox.snell.survregbayes(wb_stc, ncurves=100, PLOT=FALSE)
+cs_wb_stc_fit <- cox.snell.survregbayes(wb_stc, ncurves=250, PLOT=FALSE)
 saveRDS(cs_wb_stc_fit, "cs_wb_stc_fit.rds")
 set.seed(1)
-cs_wb_mag_fit <- cox.snell.survregbayes(wb_mag, ncurves=100, PLOT=FALSE)
+cs_wb_mag_fit <- cox.snell.survregbayes(wb_mag, ncurves=250, PLOT=FALSE)
 saveRDS(cs_wb_mag_fit, "cs_wb_mag_fit.rds")
 
 
@@ -1146,61 +1151,61 @@ cs_wb_car <- readRDS("cs_wb_car_fit.rds")
 cs_wb_stc <- readRDS("cs_wb_stc_fit.rds")
 wb_all_fit1_nostreet <- readRDS("wb_all_fit1_nostreet.rds")
 set.seed(1)
-cs_wb_all_nostreet  <- cox.snell.survregbayes(wb_all_fit1_nostreet, ncurves=100, PLOT=FALSE)
+cs_wb_all_nostreet  <- cox.snell.survregbayes(wb_all_fit1_nostreet, ncurves=250, PLOT=FALSE)
 saveRDS(cs_wb_all_nostreet, file="cs_wb_all_car_nostreet.rds")
 cs_wb_all <- readRDS("cs_wb_all_car_nostreet.rds")
 pdf(file = "fig10.pdf")
-opar <- par(mfrow=c(1,4), cex = 1, mar = c(2.1, 2.1, 2.1, 1), cex.lab = 1, cex.axis = 1)
+opar <- par(mfrow=c(2,3), cex = 1, mar = c(2.1, 2.1, 2.1, 1), cex.lab = 1, cex.axis = 1, xaxs="i", yaxs="i")
 r.max <- 4
 xlim <- c(0, r.max)
 ylim <- c(0, r.max)
 xx <- seq(0, r.max, 0.01)
-plot(1, type="n", xlim = xlim, ylim = ylim, main="Magazine Street")
+plot(1, type="n", xlim = xlim, ylim = ylim, main="Magazine Street", asp=1)
 fit <- survival::survfit(cs_wb_mag$resid1 ~ 1)
-lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
-ncurves <- 100
+lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="#BEBEBE64")
+ncurves <- 250
 for (i in 2:ncurves) {
  fit <- survival::survfit(cs_wb_mag[[i + 1]] ~ 1)
- lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
+ lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="#BEBEBE64")
 }
 lines(xx, xx, lty = 1, lwd = 2)
 r.max <- 4
 xlim <- c(0, r.max)
 ylim <- c(0, r.max)
 xx <- seq(0, r.max, 0.01)
-plot(1, type="n", xlim = xlim, ylim = ylim, main="Carrollton Avenue")
+plot(1, type="n", xlim = xlim, ylim = ylim, main="Carrollton Avenue", asp=1)
 fit <- survival::survfit(cs_wb_car$resid1 ~ 1)
-lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
-ncurves <- 100
+lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="#BEBEBE64")
+ncurves <- 250
 for (i in 2:ncurves) {
  fit <- survival::survfit(cs_wb_car[[i + 1]] ~ 1)
- lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
+ lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="#BEBEBE64")
 }
 lines(xx, xx, lty = 1, lwd = 2)
 r.max <- 4
 xlim <- c(0, r.max)
 ylim <- c(0, r.max)
 xx <- seq(0, r.max, 0.01)
-plot(1, type="n", xlim = xlim, ylim = ylim, main="St Claude Avenue")
+plot(1, type="n", xlim = xlim, ylim = ylim, main="St Claude Avenue", asp=1)
 fit <- survival::survfit(cs_wb_stc$resid1 ~ 1)
-lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
-ncurves <- 100
+lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="#BEBEBE64")
+ncurves <- 250
 for (i in 2:ncurves) {
  fit <- survival::survfit(cs_wb_stc[[i + 1]] ~ 1)
- lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
+ lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="#BEBEBE64")
 }
 lines(xx, xx, lty = 1, lwd = 2)
 r.max <- 4
 xlim <- c(0, r.max)
 ylim <- c(0, r.max)
 xx <- seq(0, r.max, 0.01)
-plot(1, type="n", xlim = xlim, ylim = ylim, main="Pooled")
+plot(1, type="n", xlim = xlim, ylim = ylim, main="Pooled", asp=1)
 fit <- survival::survfit(cs_wb_all$resid1 ~ 1)
-lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
-ncurves <- 100
+lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="#BEBEBE64")
+ncurves <- 250
 for (i in 2:ncurves) {
  fit <- survival::survfit(cs_wb_all[[i + 1]] ~ 1)
- lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
+ lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="#BEBEBE64")
 }
 lines(xx, xx, lty = 1, lwd = 2)
 par(opar)
@@ -1655,7 +1660,7 @@ dev.off()
 ## plot(1, type="n", xlim = xlim, ylim = ylim, main="Magazine Street")
 ## fit <- survival::survfit(cs_wb_mag$resid1 ~ 1)
 ## lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
-## ncurves <- 100
+## ncurves <- 250
 ## for (i in 2:ncurves) {
 ##  fit <- survival::survfit(cs_wb_mag[[i + 1]] ~ 1)
 ##  lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
@@ -1668,7 +1673,7 @@ dev.off()
 ## plot(1, type="n", xlim = xlim, ylim = ylim, main="Carrollton Avenue")
 ## fit <- survival::survfit(cs_wb_car$resid1 ~ 1)
 ## lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
-## ncurves <- 100
+## ncurves <- 250
 ## for (i in 2:ncurves) {
 ##  fit <- survival::survfit(cs_wb_car[[i + 1]] ~ 1)
 ##  lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
@@ -1681,7 +1686,7 @@ dev.off()
 ## plot(1, type="n", xlim = xlim, ylim = ylim, main="St Claude Avenue")
 ## fit <- survival::survfit(cs_wb_stc$resid1 ~ 1)
 ## lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
-## ncurves <- 100
+## ncurves <- 250
 ## for (i in 2:ncurves) {
 ##  fit <- survival::survfit(cs_wb_stc[[i + 1]] ~ 1)
 ##  lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")

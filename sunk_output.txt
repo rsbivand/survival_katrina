@@ -9,7 +9,7 @@ Loading required package: spdep
 Loading required package: sp
 Loading required package: spData
 Loading required package: sf
-Linking to GEOS 3.8.1, GDAL 3.1.2, PROJ 7.1.1
+Linking to GEOS 3.8.1, GDAL 3.1.3, PROJ 7.1.1
 Loading required package: mvtnorm
 Loading required package: tmvtnorm
 Loading required package: stats4
@@ -68,7 +68,7 @@ GDAL version >= 3.1.0 | setting mapviewOptions(fgb = TRUE)
 
 > m1 <- mapview(sf_katrina, zcol="f_sliced")
 
-> mapshot(m1, "webmap.png")
+> mapshot(m1, file="webmap.png")
 
 > ###################################################
 > ### code chunk number 16: bivand+gomez-rubio_SMij.Rnw:295-301
@@ -456,21 +456,31 @@ scan = 140000
 > ## rd_stc <- raftery.diag(as.mcmc(t(wb_stc$beta)))
 > ## rd_car <- rafte .... [TRUNCATED] 
 
+> cs_wb_car <- cox.snell.survregbayes(wb_car, ncurves=250, PLOT=FALSE)
+
 > saveRDS(cs_wb_car, "cs_wb_car.rds")
 
-> cs_wb_stc <- cox.snell.survregbayes(wb_stc, ncurves=100, PLOT=FALSE)
+> set.seed(1)
+
+> cs_wb_stc <- cox.snell.survregbayes(wb_stc, ncurves=250, PLOT=FALSE)
 
 > saveRDS(cs_wb_stc, "cs_wb_stc.rds")
 
-> cs_wb_mag <- cox.snell.survregbayes(wb_mag, ncurves=100, PLOT=FALSE)
+> set.seed(1)
+
+> cs_wb_mag <- cox.snell.survregbayes(wb_mag, ncurves=250, PLOT=FALSE)
 
 > saveRDS(cs_wb_mag, "cs_wb_mag.rds")
 
-> cs_wb_all <- cox.snell.survregbayes(wb_all_fit1, ncurves=100, PLOT=FALSE)
+> set.seed(1)
+
+> cs_wb_all <- cox.snell.survregbayes(wb_all_fit1, ncurves=250, PLOT=FALSE)
 
 > saveRDS(cs_wb_all, file="cs_wb_all_nostreet.rds")
 
-> cs_wb_stiid <- cox.snell.survregbayes(wb_all_stiid, ncurves=100, PLOT=FALSE)
+> set.seed(1)
+
+> cs_wb_stiid <- cox.snell.survregbayes(wb_all_stiid, ncurves=250, PLOT=FALSE)
 
 > saveRDS(cs_wb_stiid, file="cs_wb_stiid.rds")
 
@@ -607,19 +617,19 @@ null device
 > ### code chunk number 46: bivand+gomez-rubio_SMij.Rnw:870-875 (eval = FALSE)
 > ############### .... [TRUNCATED] 
 
-> cs_wb_car <- cox.snell.survregbayes(wb_car, ncurves=100, PLOT=FALSE)
+> cs_wb_car <- cox.snell.survregbayes(wb_car, ncurves=250, PLOT=FALSE)
 
 > saveRDS(cs_wb_car, "cs_wb_car.rds")
 
 > set.seed(1)
 
-> cs_wb_stc <- cox.snell.survregbayes(wb_stc, ncurves=100, PLOT=FALSE)
+> cs_wb_stc <- cox.snell.survregbayes(wb_stc, ncurves=250, PLOT=FALSE)
 
 > saveRDS(cs_wb_stc, "cs_wb_stc.rds")
 
 > set.seed(1)
 
-> cs_wb_mag <- cox.snell.survregbayes(wb_mag, ncurves=100, PLOT=FALSE)
+> cs_wb_mag <- cox.snell.survregbayes(wb_mag, ncurves=250, PLOT=FALSE)
 
 > saveRDS(cs_wb_mag, "cs_wb_mag.rds")
 
@@ -635,7 +645,7 @@ null device
 
 > set.seed(1)
 
-> cs_wb_all <- cox.snell.survregbayes(wb_all_fit1, ncurves=100, PLOT=FALSE)
+> cs_wb_all <- cox.snell.survregbayes(wb_all_fit1, ncurves=250, PLOT=FALSE)
 
 > saveRDS(cs_wb_all, file="cs_wb_all_nostreet.rds")
 
@@ -645,7 +655,7 @@ null device
 
 > set.seed(1)
 
-> cs_wb_stiid <- cox.snell.survregbayes(wb_all_stiid, ncurves=100, PLOT=FALSE)
+> cs_wb_stiid <- cox.snell.survregbayes(wb_all_stiid, ncurves=250, PLOT=FALSE)
 
 > saveRDS(cs_wb_stiid, file="cs_wb_stiid.rds")
 
@@ -657,7 +667,7 @@ null device
 > #(load(file="alls_summaries.RData"))
 > pdf(file = "fig5.pdf" .... [TRUNCATED] 
 
-> opar <- par(mfrow=c(1,5), cex = 1, mar = c(2.1, 2.1, 2.1, 1), cex.lab = 1, cex.axis = 1)
+> opar <- par(mfrow=c(2,3), cex = 1, mar = c(2.1, 2.1, 2.1, 1), cex.lab = 1, cex.axis = 1, xaxs="i", yaxs="i")
 
 > r.max <- 4
 
@@ -667,17 +677,17 @@ null device
 
 > xx <- seq(0, r.max, 0.01)
 
-> plot(1, type="n", xlim = xlim, ylim = ylim, main="Magazine St")
+> plot(1, type="n", xlim = xlim, ylim = ylim, main="Magazine St", asp=1)
 
 > fit <- survival::survfit(cs_wb_mag$resid1 ~ 1)
 
-> lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
+> lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="#BEBEBE64")
 
-> ncurves <- 100
+> ncurves <- 250
 
 > for (i in 2:ncurves) {
 +  fit <- survival::survfit(cs_wb_mag[[i + 1]] ~ 1)
-+  lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey" .... [TRUNCATED] 
++  lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="#BEBE ..." ... [TRUNCATED] 
 
 > lines(xx, xx, lty = 1, lwd = 2)
 
@@ -689,17 +699,17 @@ null device
 
 > xx <- seq(0, r.max, 0.01)
 
-> plot(1, type="n", xlim = xlim, ylim = ylim, main="Carrollton Ave")
+> plot(1, type="n", xlim = xlim, ylim = ylim, main="Carrollton Ave", asp=1)
 
 > fit <- survival::survfit(cs_wb_car$resid1 ~ 1)
 
-> lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
+> lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="#BEBEBE64")
 
-> ncurves <- 100
+> ncurves <- 250
 
 > for (i in 2:ncurves) {
 +  fit <- survival::survfit(cs_wb_car[[i + 1]] ~ 1)
-+  lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey" .... [TRUNCATED] 
++  lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="#BEBE ..." ... [TRUNCATED] 
 
 > lines(xx, xx, lty = 1, lwd = 2)
 
@@ -711,17 +721,17 @@ null device
 
 > xx <- seq(0, r.max, 0.01)
 
-> plot(1, type="n", xlim = xlim, ylim = ylim, main="St Claude Ave")
+> plot(1, type="n", xlim = xlim, ylim = ylim, main="St Claude Ave", asp=1)
 
 > fit <- survival::survfit(cs_wb_stc$resid1 ~ 1)
 
-> lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
+> lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="#BEBEBE64")
 
-> ncurves <- 100
+> ncurves <- 250
 
 > for (i in 2:ncurves) {
 +  fit <- survival::survfit(cs_wb_stc[[i + 1]] ~ 1)
-+  lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey" .... [TRUNCATED] 
++  lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="#BEBE ..." ... [TRUNCATED] 
 
 > lines(xx, xx, lty = 1, lwd = 2)
 
@@ -733,17 +743,17 @@ null device
 
 > xx <- seq(0, r.max, 0.01)
 
-> plot(1, type="n", xlim = xlim, ylim = ylim, main="Pooled")
+> plot(1, type="n", xlim = xlim, ylim = ylim, main="Pooled", asp=1)
 
 > fit <- survival::survfit(cs_wb_all$resid1 ~ 1)
 
-> lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
+> lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="#BEBEBE64")
 
-> ncurves <- 100
+> ncurves <- 250
 
 > for (i in 2:ncurves) {
 +  fit <- survival::survfit(cs_wb_all[[i + 1]] ~ 1)
-+  lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey" .... [TRUNCATED] 
++  lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="#BEBE ..." ... [TRUNCATED] 
 
 > lines(xx, xx, lty = 1, lwd = 2)
 
@@ -755,17 +765,17 @@ null device
 
 > xx <- seq(0, r.max, 0.01)
 
-> plot(1, type="n", xlim = xlim, ylim = ylim, main="Street IID")
+> plot(1, type="n", xlim = xlim, ylim = ylim, main="Street IID", asp=1)
 
 > fit <- survival::survfit(cs_wb_stiid$resid1 ~ 1)
 
-> lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
+> lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="#BEBEBE64")
 
-> ncurves <- 100
+> ncurves <- 250
 
 > for (i in 2:ncurves) {
 +  fit <- survival::survfit(cs_wb_stiid[[i + 1]] ~ 1)
-+  lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="gre ..." ... [TRUNCATED] 
++  lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="#BE ..." ... [TRUNCATED] 
 
 > lines(xx, xx, lty = 1, lwd = 2)
 
@@ -779,8 +789,8 @@ null device
 
 > gc()
            used  (Mb) gc trigger   (Mb)  max used   (Mb)
-Ncells  3987857 213.0    6103154  326.0   6103154  326.0
-Vcells 18815634 143.6  455761226 3477.2 568531252 4337.6
+Ncells  4038345 215.7    7970770  425.7   7970770  425.7
+Vcells 20282577 154.8  523872725 3996.9 591853091 4515.5
 
 > ###################################################
 > ### code chunk number 95: bivand+gomez-rubio_SMij.Rnw:2296-2317 (eval = FALSE)
@@ -1014,21 +1024,21 @@ scan = 140000
 
 > saveRDS(res, file="wb_iid_res.rds")
 
-> set.seed(1)
+> set.seed(567890)
 
-> cs_wb_iid_car <- cox.snell.survregbayes(wb_car, ncurves=100, PLOT=FALSE)
+> cs_wb_iid_car <- cox.snell.survregbayes(wb_car, ncurves=250, PLOT=FALSE)
 
 > saveRDS(cs_wb_iid_car, "cs_wb_iid_car.rds")
 
 > set.seed(1)
 
-> cs_wb_iid_stc <- cox.snell.survregbayes(wb_stc, ncurves=100, PLOT=FALSE)
+> cs_wb_iid_stc <- cox.snell.survregbayes(wb_stc, ncurves=250, PLOT=FALSE)
 
 > saveRDS(cs_wb_iid_stc, "cs_wb_iid_stc.rds")
 
 > set.seed(1)
 
-> cs_wb_iid_mag <- cox.snell.survregbayes(wb_mag, ncurves=100, PLOT=FALSE)
+> cs_wb_iid_mag <- cox.snell.survregbayes(wb_mag, ncurves=250, PLOT=FALSE)
 
 > saveRDS(cs_wb_iid_mag, "cs_wb_iid_mag.rds")
 
@@ -1141,7 +1151,7 @@ null device
 
 > set.seed(1)
 
-> cs_wb_all  <- cox.snell.survregbayes(wb_iid_fit1_nostreet, ncurves=100, PLOT=FALSE)
+> cs_wb_all  <- cox.snell.survregbayes(wb_iid_fit1_nostreet, ncurves=250, PLOT=FALSE)
 
 > saveRDS(cs_wb_all, file="cs_wb_iid_nostreet.rds")
 
@@ -1149,7 +1159,7 @@ null device
 
 > pdf(file = "fig8.pdf")
 
-> opar <- par(mfrow=c(1,4), cex = 1, mar = c(2.1, 2.1, 2.1, 1), cex.lab = 1, cex.axis = 1)
+> opar <- par(mfrow=c(2,3), cex = 1, mar = c(2.1, 2.1, 2.1, 1), cex.lab = 1, cex.axis = 1, xaxs="i", yaxs="i")
 
 > r.max <- 4
 
@@ -1159,17 +1169,17 @@ null device
 
 > xx <- seq(0, r.max, 0.01)
 
-> plot(1, type="n", xlim = xlim, ylim = ylim, main="Magazine Street")
+> plot(1, type="n", xlim = xlim, ylim = ylim, main="Magazine Street", asp=1)
 
 > fit <- survival::survfit(cs_wb_mag$resid1 ~ 1)
 
-> lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
+> lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="#BEBEBE64")
 
-> ncurves <- 100
+> ncurves <- 250
 
 > for (i in 2:ncurves) {
 +  fit <- survival::survfit(cs_wb_mag[[i + 1]] ~ 1)
-+  lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey" .... [TRUNCATED] 
++  lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="#BEBE ..." ... [TRUNCATED] 
 
 > lines(xx, xx, lty = 1, lwd = 2)
 
@@ -1181,17 +1191,17 @@ null device
 
 > xx <- seq(0, r.max, 0.01)
 
-> plot(1, type="n", xlim = xlim, ylim = ylim, main="Carrollton Avenue")
+> plot(1, type="n", xlim = xlim, ylim = ylim, main="Carrollton Avenue", asp=1)
 
 > fit <- survival::survfit(cs_wb_car$resid1 ~ 1)
 
-> lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
+> lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="#BEBEBE64")
 
-> ncurves <- 100
+> ncurves <- 250
 
 > for (i in 2:ncurves) {
 +  fit <- survival::survfit(cs_wb_car[[i + 1]] ~ 1)
-+  lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey" .... [TRUNCATED] 
++  lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="#BEBE ..." ... [TRUNCATED] 
 
 > lines(xx, xx, lty = 1, lwd = 2)
 
@@ -1203,17 +1213,17 @@ null device
 
 > xx <- seq(0, r.max, 0.01)
 
-> plot(1, type="n", xlim = xlim, ylim = ylim, main="St Claude Avenue")
+> plot(1, type="n", xlim = xlim, ylim = ylim, main="St Claude Avenue", asp=1)
 
 > fit <- survival::survfit(cs_wb_stc$resid1 ~ 1)
 
-> lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
+> lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="#BEBEBE64")
 
-> ncurves <- 100
+> ncurves <- 250
 
 > for (i in 2:ncurves) {
 +  fit <- survival::survfit(cs_wb_stc[[i + 1]] ~ 1)
-+  try(lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="g ..." ... [TRUNCATED] 
++  try(lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="# ..." ... [TRUNCATED] 
 
 > lines(xx, xx, lty = 1, lwd = 2)
 
@@ -1225,17 +1235,17 @@ null device
 
 > xx <- seq(0, r.max, 0.01)
 
-> plot(1, type="n", xlim = xlim, ylim = ylim, main="Pooled")
+> plot(1, type="n", xlim = xlim, ylim = ylim, main="Pooled", asp=1)
 
 > fit <- survival::survfit(cs_wb_all$resid1 ~ 1)
 
-> lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
+> lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="#BEBEBE64")
 
-> ncurves <- 100
+> ncurves <- 250
 
 > for (i in 2:ncurves) {
 +  fit <- survival::survfit(cs_wb_all[[i + 1]] ~ 1)
-+  lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey" .... [TRUNCATED] 
++  lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="#BEBE ..." ... [TRUNCATED] 
 
 > lines(xx, xx, lty = 1, lwd = 2)
 
@@ -1249,8 +1259,8 @@ null device
 
 > gc()
             used  (Mb) gc trigger   (Mb)  max used   (Mb)
-Ncells   4079753 217.9    7399174  395.2   7399174  395.2
-Vcells 126297456 963.6  850715392 6490.5 886016791 6759.8
+Ncells   4133889 220.8    7970770  425.7   7970770  425.7
+Vcells 128228363 978.4  853656229 6512.9 896387189 6838.9
 
 > ###################################################
 > ### code chunk number 59: bivand+gomez-rubio_SMij.Rnw:1308-1313 (eval = FALSE)
@@ -1437,19 +1447,19 @@ scan = 140000
 > ## rd_pld_car <- raftery.diag(as.mcmc(cbind(t(wb_all_fit1$beta), wb_all_fit1$tau2)))
 > ## rd_stc_car <- raftery.diag(as.mcmc(cbin .... [TRUNCATED] 
 
-> cs_wb_car_fit <- cox.snell.survregbayes(wb_car, ncurves=100, PLOT=FALSE)
+> cs_wb_car_fit <- cox.snell.survregbayes(wb_car, ncurves=250, PLOT=FALSE)
 
 > saveRDS(cs_wb_car_fit, "cs_wb_car_fit.rds")
 
 > set.seed(1)
 
-> cs_wb_stc_fit <- cox.snell.survregbayes(wb_stc, ncurves=100, PLOT=FALSE)
+> cs_wb_stc_fit <- cox.snell.survregbayes(wb_stc, ncurves=250, PLOT=FALSE)
 
 > saveRDS(cs_wb_stc_fit, "cs_wb_stc_fit.rds")
 
 > set.seed(1)
 
-> cs_wb_mag_fit <- cox.snell.survregbayes(wb_mag, ncurves=100, PLOT=FALSE)
+> cs_wb_mag_fit <- cox.snell.survregbayes(wb_mag, ncurves=250, PLOT=FALSE)
 
 > saveRDS(cs_wb_mag_fit, "cs_wb_mag_fit.rds")
 
@@ -1559,7 +1569,7 @@ null device
 
 > set.seed(1)
 
-> cs_wb_all_nostreet  <- cox.snell.survregbayes(wb_all_fit1_nostreet, ncurves=100, PLOT=FALSE)
+> cs_wb_all_nostreet  <- cox.snell.survregbayes(wb_all_fit1_nostreet, ncurves=250, PLOT=FALSE)
 
 > saveRDS(cs_wb_all_nostreet, file="cs_wb_all_car_nostreet.rds")
 
@@ -1567,7 +1577,7 @@ null device
 
 > pdf(file = "fig10.pdf")
 
-> opar <- par(mfrow=c(1,4), cex = 1, mar = c(2.1, 2.1, 2.1, 1), cex.lab = 1, cex.axis = 1)
+> opar <- par(mfrow=c(2,3), cex = 1, mar = c(2.1, 2.1, 2.1, 1), cex.lab = 1, cex.axis = 1, xaxs="i", yaxs="i")
 
 > r.max <- 4
 
@@ -1577,17 +1587,17 @@ null device
 
 > xx <- seq(0, r.max, 0.01)
 
-> plot(1, type="n", xlim = xlim, ylim = ylim, main="Magazine Street")
+> plot(1, type="n", xlim = xlim, ylim = ylim, main="Magazine Street", asp=1)
 
 > fit <- survival::survfit(cs_wb_mag$resid1 ~ 1)
 
-> lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
+> lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="#BEBEBE64")
 
-> ncurves <- 100
+> ncurves <- 250
 
 > for (i in 2:ncurves) {
 +  fit <- survival::survfit(cs_wb_mag[[i + 1]] ~ 1)
-+  lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey" .... [TRUNCATED] 
++  lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="#BEBE ..." ... [TRUNCATED] 
 
 > lines(xx, xx, lty = 1, lwd = 2)
 
@@ -1599,17 +1609,17 @@ null device
 
 > xx <- seq(0, r.max, 0.01)
 
-> plot(1, type="n", xlim = xlim, ylim = ylim, main="Carrollton Avenue")
+> plot(1, type="n", xlim = xlim, ylim = ylim, main="Carrollton Avenue", asp=1)
 
 > fit <- survival::survfit(cs_wb_car$resid1 ~ 1)
 
-> lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
+> lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="#BEBEBE64")
 
-> ncurves <- 100
+> ncurves <- 250
 
 > for (i in 2:ncurves) {
 +  fit <- survival::survfit(cs_wb_car[[i + 1]] ~ 1)
-+  lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey" .... [TRUNCATED] 
++  lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="#BEBE ..." ... [TRUNCATED] 
 
 > lines(xx, xx, lty = 1, lwd = 2)
 
@@ -1621,17 +1631,17 @@ null device
 
 > xx <- seq(0, r.max, 0.01)
 
-> plot(1, type="n", xlim = xlim, ylim = ylim, main="St Claude Avenue")
+> plot(1, type="n", xlim = xlim, ylim = ylim, main="St Claude Avenue", asp=1)
 
 > fit <- survival::survfit(cs_wb_stc$resid1 ~ 1)
 
-> lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
+> lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="#BEBEBE64")
 
-> ncurves <- 100
+> ncurves <- 250
 
 > for (i in 2:ncurves) {
 +  fit <- survival::survfit(cs_wb_stc[[i + 1]] ~ 1)
-+  lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey" .... [TRUNCATED] 
++  lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="#BEBE ..." ... [TRUNCATED] 
 
 > lines(xx, xx, lty = 1, lwd = 2)
 
@@ -1643,17 +1653,17 @@ null device
 
 > xx <- seq(0, r.max, 0.01)
 
-> plot(1, type="n", xlim = xlim, ylim = ylim, main="Pooled")
+> plot(1, type="n", xlim = xlim, ylim = ylim, main="Pooled", asp=1)
 
 > fit <- survival::survfit(cs_wb_all$resid1 ~ 1)
 
-> lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey")
+> lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="#BEBEBE64")
 
-> ncurves <- 100
+> ncurves <- 250
 
 > for (i in 2:ncurves) {
 +  fit <- survival::survfit(cs_wb_all[[i + 1]] ~ 1)
-+  lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="grey" .... [TRUNCATED] 
++  lines(fit, fun = "cumhaz", conf.int = F, mark.time = FALSE, col="#BEBE ..." ... [TRUNCATED] 
 
 > lines(xx, xx, lty = 1, lwd = 2)
 
@@ -1666,9 +1676,9 @@ null device
 > rm(wb_all_fit1_nostreet, wb_inla_mag, wb_inla_car, wb_inla_stc, wb_inla_all, wb_all_fit1, wb_car, wb_mag, wb_stc)
 
 > gc()
-            used   (Mb) gc trigger   (Mb)   max used   (Mb)
-Ncells   4134896  220.9    7399174  395.2    7399174  395.2
-Vcells 234115453 1786.2  903533792 6893.5 1129349826 8616.3
+            used (Mb) gc trigger   (Mb)   max used   (Mb)
+Ncells   4193830  224    7970770  425.7    7970770  425.7
+Vcells 236971258 1808 1088051236 8301.2 1240619078 9465.2
 
 > ###################################################
 > ### code chunk number 71: bivand+gomez-rubio_SMij.Rnw:1624-1629 (eval = FALSE)
@@ -1806,8 +1816,8 @@ MCMC No frailty & 2023.89 & 788.60 & 469.19 & 3350.72 \\
   MCMC CAR frailty & 2026.86 & 703.42 & 459.94 & 3282.99 \\ 
    \hline
 INLA No frailty & -386.04 & 144.51 & 121.96 & -88.18 \\ 
-  INLA IID frailty & -693.57 & 110.61 & 116.03 & -364.19 \\ 
-  INLA CAR frailty & -601.52 & 67.78 & 111.72 & -404.08 \\ 
+  INLA IID frailty & -691.55 & 110.61 & 116.03 & -364.19 \\ 
+  INLA CAR frailty & -601.93 & 67.78 & 111.72 & -404.10 \\ 
    \hline
 \end{tabular}
 
@@ -2008,35 +2018,36 @@ other attached packages:
 [25] sp_1.4-4             Matrix_1.2-18       
 
 loaded via a namespace (and not attached):
- [1] nlme_3.1-148            satellite_1.0.2         webshot_0.5.2          
- [4] gmodels_2.18.1          numDeriv_2016.8-1.1     Deriv_4.0              
- [7] tools_4.0.2             R6_2.4.1                KernSmooth_2.23-17     
-[10] DBI_1.1.0               colorspace_1.4-1        raster_3.3-13          
-[13] withr_2.2.0             tidyselect_1.1.0        gridExtra_2.3          
-[16] leaflet_2.0.3           curl_4.3                compiler_4.0.2         
-[19] leafem_0.1.3            expm_0.999-5            labeling_0.3           
-[22] scales_1.1.1            classInt_0.4-3          systemfonts_0.2.3      
-[25] stringr_1.4.0           digest_0.6.25           foreign_0.8-80         
-[28] svglite_1.2.3.2         rio_0.5.16              base64enc_0.1-3        
-[31] pkgconfig_2.0.3         htmltools_0.5.0         htmlwidgets_1.5.1      
-[34] rlang_0.4.7             readxl_1.3.1            farver_2.0.3           
-[37] generics_0.0.2          jsonlite_1.7.0          crosstalk_1.1.0.1      
-[40] gtools_3.8.2            dplyr_1.0.2             zip_2.1.0              
-[43] magrittr_1.5            munsell_0.5.0           abind_1.4-5            
-[46] gdtools_0.2.2           lifecycle_0.2.0         stringi_1.4.6          
-[49] yaml_2.2.1              grid_4.0.2              gdata_2.18.0           
-[52] forcats_0.5.0           crayon_1.3.4            deldir_0.1-28          
-[55] lattice_0.20-41         haven_2.3.1             splines_4.0.2          
-[58] hms_0.5.3               leafpop_0.0.5           pillar_1.4.6           
-[61] uuid_0.1-4              boot_1.3-25             codetools_0.2-16       
-[64] LearnBayes_2.15.1       glue_1.4.1              leaflet.providers_1.9.0
-[67] data.table_1.13.0       png_0.1-7               vctrs_0.3.2            
-[70] MatrixModels_0.4-1      cellranger_1.1.0        RANN_2.6.1             
-[73] gtable_0.3.0            purrr_0.3.4             tidyr_1.1.1            
-[76] openxlsx_4.1.5          e1071_1.7-3             coda_0.19-3            
-[79] class_7.3-17            tibble_3.0.3            iterators_1.0.12       
-[82] units_0.6-7             ellipsis_0.3.1          brew_1.0-6             
-[85] spDataLarge_0.4.1      
+ [1] leafem_0.1.3            colorspace_1.4-1        deldir_0.1-28          
+ [4] ellipsis_0.3.1          class_7.3-17            rio_0.5.16             
+ [7] leaflet_2.0.3           satellite_1.0.2         base64enc_0.1-3        
+[10] farver_2.0.3            Deriv_4.0.1             MatrixModels_0.4-1     
+[13] codetools_0.2-16        splines_4.0.2           jsonlite_1.7.0         
+[16] png_0.1-7               compiler_4.0.2          leaflet.providers_1.9.0
+[19] htmltools_0.5.0         tools_4.0.2             coda_0.19-3            
+[22] gtable_0.3.0            glue_1.4.2              RANN_2.6.1             
+[25] dplyr_1.0.2             gmodels_2.18.1          cellranger_1.1.0       
+[28] raster_3.3-15           vctrs_0.3.4             gdata_2.18.0           
+[31] svglite_1.2.3.2         nlme_3.1-149            iterators_1.0.12       
+[34] crosstalk_1.1.0.1       stringr_1.4.0           ps_1.3.4               
+[37] openxlsx_4.1.5          lifecycle_0.2.0         gtools_3.8.2           
+[40] LearnBayes_2.15.1       scales_1.1.1            hms_0.5.3              
+[43] expm_0.999-5            yaml_2.2.1              curl_4.3               
+[46] gridExtra_2.3           gdtools_0.2.2           stringi_1.4.6          
+[49] leafpop_0.0.5           spDataLarge_0.4.1       e1071_1.7-3            
+[52] boot_1.3-25             zip_2.1.1               cpp11_0.2.1            
+[55] rlang_0.4.7             pkgconfig_2.0.3         systemfonts_0.3.0      
+[58] lattice_0.20-41         purrr_0.3.4             htmlwidgets_1.5.1      
+[61] labeling_0.3            processx_3.4.3          tidyselect_1.1.0       
+[64] magrittr_1.5            R6_2.4.1                generics_0.0.2         
+[67] DBI_1.1.0               pillar_1.4.6            haven_2.3.1            
+[70] foreign_0.8-80          withr_2.2.0             units_0.6-7            
+[73] abind_1.4-5             tibble_3.0.3            crayon_1.3.4           
+[76] uuid_0.1-4              KernSmooth_2.23-17      grid_4.0.2             
+[79] readxl_1.3.1            data.table_1.13.0       callr_3.4.3            
+[82] forcats_0.5.0           digest_0.6.25           classInt_0.4-3         
+[85] webshot_0.5.2           numDeriv_2016.8-1.1     tidyr_1.1.2            
+[88] brew_1.0-6              munsell_0.5.0          
 
 > sink(type = "message")
 
