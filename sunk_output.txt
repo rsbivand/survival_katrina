@@ -9,7 +9,7 @@ Loading required package: spdep
 Loading required package: sp
 Loading required package: spData
 Loading required package: sf
-Linking to GEOS 3.8.1, GDAL 3.1.3, PROJ 7.1.1
+Linking to GEOS 3.9.0dev, GDAL 3.2.0, PROJ 7.2.0
 Loading required package: mvtnorm
 Loading required package: tmvtnorm
 Loading required package: stats4
@@ -66,7 +66,7 @@ GDAL version >= 3.1.0 | setting mapviewOptions(fgb = TRUE)
 
 > if (sf:::CPL_gdal_version() >= "3.1.0") mapviewOptions(fgb = FALSE)
 
-> m1 <- mapview(sf_katrina, zcol="f_sliced")
+> m1 <- mapview(sf_katrina, zcol="f_sliced", layer.name="Business re-opened after Katrina")
 
 > mapshot(m1, file="webmap.png")
 
@@ -789,8 +789,8 @@ null device
 
 > gc()
            used  (Mb) gc trigger   (Mb)  max used   (Mb)
-Ncells  4038345 215.7    7970770  425.7   7970770  425.7
-Vcells 20282577 154.8  523872725 3996.9 591853091 4515.5
+Ncells  4044135 216.0    6249102  333.8   6249102  333.8
+Vcells 20231909 154.4  482882271 3684.1 603646005 4605.5
 
 > ###################################################
 > ### code chunk number 95: bivand+gomez-rubio_SMij.Rnw:2296-2317 (eval = FALSE)
@@ -1259,8 +1259,8 @@ null device
 
 > gc()
             used  (Mb) gc trigger   (Mb)  max used   (Mb)
-Ncells   4133889 220.8    7970770  425.7   7970770  425.7
-Vcells 128228363 978.4  853656229 6512.9 896387189 6838.9
+Ncells   4139889 221.1    7928005  423.5   7928005  423.5
+Vcells 128178088 978.0  853540290 6512.0 895675525 6833.5
 
 > ###################################################
 > ### code chunk number 59: bivand+gomez-rubio_SMij.Rnw:1308-1313 (eval = FALSE)
@@ -1676,9 +1676,9 @@ null device
 > rm(wb_all_fit1_nostreet, wb_inla_mag, wb_inla_car, wb_inla_stc, wb_inla_all, wb_all_fit1, wb_car, wb_mag, wb_stc)
 
 > gc()
-            used (Mb) gc trigger   (Mb)   max used   (Mb)
-Ncells   4193830  224    7970770  425.7    7970770  425.7
-Vcells 236971258 1808 1088051236 8301.2 1240619078 9465.2
+            used   (Mb) gc trigger   (Mb)   max used   (Mb)
+Ncells   4199835  224.3    7928005  423.5    7928005  423.5
+Vcells 236921072 1807.6  906532938 6916.3 1133044734 8644.5
 
 > ###################################################
 > ### code chunk number 71: bivand+gomez-rubio_SMij.Rnw:1624-1629 (eval = FALSE)
@@ -1816,8 +1816,8 @@ MCMC No frailty & 2023.89 & 788.60 & 469.19 & 3350.72 \\
   MCMC CAR frailty & 2026.86 & 703.42 & 459.94 & 3282.99 \\ 
    \hline
 INLA No frailty & -386.04 & 144.51 & 121.96 & -88.18 \\ 
-  INLA IID frailty & -691.55 & 110.61 & 116.03 & -364.19 \\ 
-  INLA CAR frailty & -601.93 & 67.78 & 111.72 & -404.10 \\ 
+  INLA IID frailty & -691.79 & 110.61 & 116.03 & -363.82 \\ 
+  INLA CAR frailty & -601.94 & 67.78 & 111.72 & -404.09 \\ 
    \hline
 \end{tabular}
 
@@ -1986,13 +1986,13 @@ null device
 > ###################################################
 > ### code chunk number 89: bivand+gomez-rubio_SMij.Rnw:2078-2125 (eval = FALSE)
 > ############# .... [TRUNCATED] 
-R version 4.0.2 (2020-06-22)
+R version 4.0.3 (2020-10-10)
 Platform: x86_64-pc-linux-gnu (64-bit)
 Running under: Fedora 32 (Workstation Edition)
 
 Matrix products: default
-BLAS:   /home/rsb/topics/R/R402-share/lib64/R/lib/libRblas.so
-LAPACK: /home/rsb/topics/R/R402-share/lib64/R/lib/libRlapack.so
+BLAS:   /home/rsb/topics/R/R403-share/lib64/R/lib/libRblas.so
+LAPACK: /home/rsb/topics/R/R403-share/lib64/R/lib/libRlapack.so
 
 locale:
  [1] LC_CTYPE=en_GB.UTF-8       LC_NUMERIC=C              
@@ -2007,47 +2007,47 @@ attached base packages:
 [8] methods   base     
 
 other attached packages:
- [1] ProbitSpatial_1.0    speedglm_0.3-2       MASS_7.3-52         
+ [1] ProbitSpatial_1.0    speedglm_0.3-2       MASS_7.3-53         
  [4] Rcpp_1.0.5           spatialreg_1.1-6     spBayesSurv_1.1.4   
- [7] INLA_20.08.11-1      foreach_1.5.0        ggfortify_0.4.10    
-[10] ggplot2_3.3.2        zoo_1.8-8            survival_3.2-3      
-[13] car_3.0-9            carData_3.0-4        mapview_2.9.1       
+ [7] INLA_20.08.11-1      foreach_1.5.1        ggfortify_0.4.11    
+[10] ggplot2_3.3.2        zoo_1.8-8            survival_3.2-7      
+[13] car_3.0-10           carData_3.0-4        mapview_2.9.4       
 [16] xtable_1.8-4         spatialprobit_0.9-11 tmvtnorm_1.4-10     
-[19] gmm_1.6-5            sandwich_2.5-1       mvtnorm_1.1-1       
-[22] spdep_1.1-5          sf_0.9-6             spData_0.3.8        
+[19] gmm_1.6-5            sandwich_3.0-0       mvtnorm_1.1-1       
+[22] spdep_1.1-5          sf_0.9-7             spData_0.3.8        
 [25] sp_1.4-4             Matrix_1.2-18       
 
 loaded via a namespace (and not attached):
- [1] leafem_0.1.3            colorspace_1.4-1        deldir_0.1-28          
+ [1] leafem_0.1.3            colorspace_2.0-0        deldir_0.2-3           
  [4] ellipsis_0.3.1          class_7.3-17            rio_0.5.16             
  [7] leaflet_2.0.3           satellite_1.0.2         base64enc_0.1-3        
-[10] farver_2.0.3            Deriv_4.0.1             MatrixModels_0.4-1     
-[13] codetools_0.2-16        splines_4.0.2           jsonlite_1.7.0         
-[16] png_0.1-7               compiler_4.0.2          leaflet.providers_1.9.0
-[19] htmltools_0.5.0         tools_4.0.2             coda_0.19-3            
+[10] farver_2.0.3            Deriv_4.1.1             MatrixModels_0.4-1     
+[13] codetools_0.2-18        splines_4.0.3           jsonlite_1.7.1         
+[16] png_0.1-7               compiler_4.0.3          leaflet.providers_1.9.0
+[19] htmltools_0.5.0         tools_4.0.3             coda_0.19-4            
 [22] gtable_0.3.0            glue_1.4.2              RANN_2.6.1             
 [25] dplyr_1.0.2             gmodels_2.18.1          cellranger_1.1.0       
 [28] raster_3.3-15           vctrs_0.3.4             gdata_2.18.0           
-[31] svglite_1.2.3.2         nlme_3.1-149            iterators_1.0.12       
-[34] crosstalk_1.1.0.1       stringr_1.4.0           ps_1.3.4               
-[37] openxlsx_4.1.5          lifecycle_0.2.0         gtools_3.8.2           
+[31] svglite_1.2.3.2         nlme_3.1-150            iterators_1.0.13       
+[34] crosstalk_1.1.0.1       stringr_1.4.0           ps_1.4.0               
+[37] openxlsx_4.2.3          lifecycle_0.2.0         gtools_3.8.2           
 [40] LearnBayes_2.15.1       scales_1.1.1            hms_0.5.3              
 [43] expm_0.999-5            yaml_2.2.1              curl_4.3               
-[46] gridExtra_2.3           gdtools_0.2.2           stringi_1.4.6          
-[49] leafpop_0.0.5           spDataLarge_0.4.1       e1071_1.7-3            
-[52] boot_1.3-25             zip_2.1.1               cpp11_0.2.1            
-[55] rlang_0.4.7             pkgconfig_2.0.3         systemfonts_0.3.0      
-[58] lattice_0.20-41         purrr_0.3.4             htmlwidgets_1.5.1      
-[61] labeling_0.3            processx_3.4.3          tidyselect_1.1.0       
-[64] magrittr_1.5            R6_2.4.1                generics_0.0.2         
-[67] DBI_1.1.0               pillar_1.4.6            haven_2.3.1            
-[70] foreign_0.8-80          withr_2.2.0             units_0.6-7            
-[73] abind_1.4-5             tibble_3.0.3            crayon_1.3.4           
-[76] uuid_0.1-4              KernSmooth_2.23-17      grid_4.0.2             
-[79] readxl_1.3.1            data.table_1.13.0       callr_3.4.3            
-[82] forcats_0.5.0           digest_0.6.25           classInt_0.4-3         
-[85] webshot_0.5.2           numDeriv_2016.8-1.1     tidyr_1.1.2            
-[88] brew_1.0-6              munsell_0.5.0          
+[46] gridExtra_2.3           gdtools_0.2.2           stringi_1.5.3          
+[49] leafpop_0.0.6           spDataLarge_0.5.0       e1071_1.7-4            
+[52] boot_1.3-25             zip_2.1.1               rlang_0.4.8            
+[55] pkgconfig_2.0.3         systemfonts_0.3.2       lattice_0.20-41        
+[58] purrr_0.3.4             htmlwidgets_1.5.2       labeling_0.4.2         
+[61] processx_3.4.4          tidyselect_1.1.0        magrittr_1.5           
+[64] R6_2.5.0                generics_0.1.0          DBI_1.1.0              
+[67] pillar_1.4.6            haven_2.3.1             foreign_0.8-80         
+[70] withr_2.3.0             units_0.6-7             abind_1.4-5            
+[73] tibble_3.0.4            crayon_1.3.4            uuid_0.1-4             
+[76] KernSmooth_2.23-18      grid_4.0.3              readxl_1.3.1           
+[79] data.table_1.13.2       callr_3.5.1             forcats_0.5.0          
+[82] digest_0.6.27           classInt_0.4-3          webshot_0.5.2          
+[85] numDeriv_2016.8-1.1     tidyr_1.1.2             brew_1.0-6             
+[88] munsell_0.5.0          
 
 > sink(type = "message")
 
