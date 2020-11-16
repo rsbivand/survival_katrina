@@ -43,7 +43,7 @@ sf_katrina$f_sliced <- factor(sf_katrina$sliced, levels=4:0, labels=c("day 0-90"
 
 library(mapview)
 if (sf:::CPL_gdal_version() >= "3.1.0") mapviewOptions(fgb = FALSE)
-m1 <- mapview(sf_katrina, zcol="f_sliced")
+m1 <- mapview(sf_katrina, zcol="f_sliced", layer.name="Business re-opened after Katrina")
 mapshot(m1, file="webmap.png")
 
 ###################################################
